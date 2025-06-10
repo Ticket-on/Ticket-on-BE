@@ -7,6 +7,12 @@ public class Urls {
 
     public static final String EVENTS = "/events";
     public static final String EVENT_DETAIL = "/events/{id}";
+    public static final String EVENT_NEW = "/events/new";
+
+    public static final String ADMIN_EVENTS = "/admin/events";
+    public static final String ADMIN_EVENT_MANAGE = "/admin/events/{id}";
+
+    public static final String TICKET_TYPE_NEW_ID = "/ticketTypes/new/{id}";
 
     public static final String TICKETS = "/tickets";
     public static final String TICKET_PURCHASE = "/tickets/purchase";

@@ -6,14 +6,23 @@
 </head>
 <body>
 <div>
-
+    <a th:href="@{${urls.ADMIN_EVENTS}}">목록으로</a>
     <p><p th:text="${eventItem.title}">이벤트명</p> <strong>날짜:</strong> <span th:text="${eventItem.startDate}">####-##-##</span> ~ <span th:text="${eventItem.endDate}">####-##-##</span></p>
     <div th:each="ticketType : ${eventItem.TicketTypes}">
         <span th:text="${ticketType.name}"></span> [<span th:text="${ticketType.price}"></span>] <span th:text="${ticketType.description}"></span>
         <form th:action="@{${urls.TICKET_PURCHASE}}" method="post">
             <input type="hidden" name="ticketTypeId" th:value="${ticketType.id}">
-            개수 <input type="number" name="quantity" min="1" max="100">
+            개수 <input type="number" name="quantity" min="1" max="100" required>
             <input type="submit" value="구매">
+        </form>
+    </div>
+    <div>
+        <form th:action="@{${urls.TICKET_TYPE_NEW_ID}(id=${eventItem.id})}" method="post">
+            <input type="text" name="name" placeholder="Name" max="50" required>
+            <input type="number" name="price" placeholder="Price" min="0" max="100000000" required>
+            <input type="number" name="maxQuantity" placeholder="Quantity" min="0" max="100000000">
+            <input type="text" name="description" placeholder="Description" min="0" max="200">
+            <input type="submit" value="등록">
         </form>
     </div>
 </div>

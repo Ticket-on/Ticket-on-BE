@@ -19,6 +19,10 @@ public class EventItemService {
 
     private final EventItemRepository eventItemRepository;
 
+    public Long addEventItem(EventItemCreateRequest request) {
+        return eventItemRepository.save(request.toEntity()).getId();
+    }
+
     //
     public List<EventItemResponse> getEventItemList() {
         List<EventItem> eventItems = eventItemRepository.findAllByOrderByStartDateAsc();
