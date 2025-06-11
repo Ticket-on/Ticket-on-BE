@@ -13,7 +13,11 @@ public class CustomUserDetails implements UserDetails {
     private final Member member;
 
     public Member getMember() {
-        return member;
+        return this.member;
+    }
+
+    public Long getMemberId() {
+        return this.member.getId();
     }
 
 

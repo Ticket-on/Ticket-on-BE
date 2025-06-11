@@ -8,6 +8,7 @@ import com.ticketon.ticketon.domain.ticket.entity.dto.TicketPurchaseRequest;
 import com.ticketon.ticketon.domain.ticket.entity.dto.TicketResponse;
 import com.ticketon.ticketon.domain.ticket.repository.TicketRepository;
 import com.ticketon.ticketon.domain.ticket.repository.TicketTypeRepository;
+import com.ticketon.ticketon.domain.ticket.service.strategy.TicketIssueStrategy;
 import com.ticketon.ticketon.exception.custom.NotFoundDataException;
 import com.ticketon.ticketon.utils.SuccessResponse;
 import jakarta.transaction.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -26,22 +28,34 @@ public class TicketService {
     private final TicketTypeRepository ticketTypeRepository;
     private final MemberRepository memberRepository;
 
+    private final Map<String, TicketIssueStrategy> strategyMap;
 
-    public void purchaseTicket(TicketPurchaseRequest request, Long memberId) {
+//    락 전략 없는 코드
+//    public void purchaseTicket(TicketPurchaseRequest request, Long memberId) {
+//
+//        // 쿼리 날리지 않고 않고 프록시로 조회
+//        TicketType ticketType = ticketTypeRepository.getReferenceById(request.getTicketTypeId());
+//        Member member = memberRepository.getReferenceById(memberId);
+//
+//        List<Ticket> tickets = new ArrayList<>();
+//        for(int i = 1; i <= request.getQuantity(); i++) {
+//            tickets.add(Ticket.createNormalTicket(ticketType, member));
+//            ticketType.increaseIssuedQuantity();
+//        }
+//
+//        ticketRepository.saveAll(tickets);
+//
+//        return;
+//    }
 
-        // 쿼리 날리지 않고 않고 프록시로 조회
-        TicketType ticketType = ticketTypeRepository.getReferenceById(request.getTicketTypeId());
-        Member member = memberRepository.getReferenceById(memberId);
 
-        List<Ticket> tickets = new ArrayList<>();
-        for(int i = 1; i <= request.getQuantity(); i++) {
-            tickets.add(Ticket.createNormalTicket(ticketType, member));
-            ticketType.increaseIssuedQuantity();
+    public void purchaseTicket(String strategyType, TicketPurchaseRequest request, Long memberId) {
+
+        TicketIssueStrategy strategy = strategyMap.get(strategyType);
+        if (strategy == null) {
+            throw new IllegalArgumentException("존재하지 않는 전략 타입: " + strategyType);
         }
-
-        ticketRepository.saveAll(tickets);
-
-        return;
+        strategy.purchaseTicket(request, memberId);
     }
 
     // 멤버 티켓 목록

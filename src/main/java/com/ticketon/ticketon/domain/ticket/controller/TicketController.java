@@ -24,8 +24,8 @@ public class TicketController {
 
     // 티켓 구매
     @PostMapping(Urls.TICKET_PURCHASE)
-    public String purchaseTicket(TicketPurchaseRequest ticketPurchaseRequest, @CurrentUser CustomUserDetails customUserDetails) {
-        ticketService.purchaseTicket(ticketPurchaseRequest, customUserDetails.getMember().getId());
+    public String purchaseTicket(TicketPurchaseRequest request, @CurrentUser CustomUserDetails customUserDetails) {
+        ticketService.purchaseTicket("optimistic", request, customUserDetails.getMemberId());
         return "redirect:/success";
     }
 
@@ -33,7 +33,7 @@ public class TicketController {
     // @로그인 된 유저만 접근가능
     @GetMapping(Urls.MY_TICKETS)
     public String myTicketsPage(@CurrentUser CustomUserDetails customUserDetails, Model model) {
-        List<TicketResponse> tickets = ticketService.findMyTickets(customUserDetails.getMember().getId());
+        List<TicketResponse> tickets = ticketService.findMyTickets(customUserDetails.getMemberId());
         model.addAttribute("tickets", tickets);
         return "/ticket/test/myTickets";
     }
@@ -42,7 +42,7 @@ public class TicketController {
     // @로그인 된 유저만 접근가능
     @PostMapping(Urls.TICKET_CANCEL)
     public String myTicketCancel(@RequestParam Long ticketId, @CurrentUser CustomUserDetails customUserDetails, Model model) {
-        ticketService.cancelMyTicket(customUserDetails.getMember().getId(), ticketId);
+        ticketService.cancelMyTicket(customUserDetails.getMemberId(), ticketId);
         model.addAttribute("ticketId", ticketId);
         return "redirect:/my-tickets";
     }
