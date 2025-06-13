@@ -33,8 +33,6 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-
-
     // 티켓 구매
     @PostMapping(Urls.TICKET_PURCHASE)
     public String purchaseTicket(TicketPurchaseRequest ticketPurchaseRequest, @CurrentUser CustomUserDetails customUserDetails) {
@@ -60,9 +58,9 @@ public class TicketController {
         return "redirect:/my-tickets";
 
 
-    @GetMapping(Urls.TICKETS)
-    public String purchaseTicket() {
-        return "purchaseComplete";
+//    @GetMapping(Urls.TICKETS)
+//    public String purchaseTicket() {
+//        return "purchaseComplete";
+//    }
     }
-
 }

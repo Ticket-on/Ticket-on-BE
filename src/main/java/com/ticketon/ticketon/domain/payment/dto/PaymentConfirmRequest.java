@@ -1,0 +1,15 @@
+package com.ticketon.ticketon.domain.payment.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class PaymentConfirmRequest {
+    private Long memberId;
+    private String paymentKey;
+    private String ticketId; // 요청 보낼 때만 String 타입
+    private int amount;
+}
