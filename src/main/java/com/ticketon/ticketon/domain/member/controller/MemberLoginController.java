@@ -1,6 +1,6 @@
 package com.ticketon.ticketon.domain.member.controller;
 
-import com.ticketon.ticketon.domain.member.entity.dto.MemberSingupRequest;
+import com.ticketon.ticketon.domain.member.entity.dto.MemberSignupRequest;
 import com.ticketon.ticketon.domain.member.service.MemberService;
 import com.ticketon.ticketon.global.constants.Urls;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class MemberLoginController {
     // JSON 요청 처리
     // !! 테스트 메서드 !!
     @PostMapping(value = Urls.SIGN_UP, consumes = "application/json")
-    public String signupJson(@RequestBody MemberSingupRequest request) {
+    public String signupJson(@RequestBody MemberSignupRequest request) {
         memberService.save(request);
         return "redirect:/login";
     }
@@ -28,7 +28,7 @@ public class MemberLoginController {
     // form-urlencoded 요청 처리
     // !! 테스트 메서드 !!
     @PostMapping(value = Urls.SIGN_UP, consumes = "application/x-www-form-urlencoded")
-    public String signupForm(@ModelAttribute MemberSingupRequest request) {
+    public String signupForm(@ModelAttribute MemberSignupRequest request) {
         memberService.save(request);
         return "redirect:/login";
     }
