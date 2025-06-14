@@ -34,10 +34,6 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus ticketStatus;
 
-    // 낙관적 락(Optimistic Lock) 구현을 위한 버전 관리 컬럼
-    @Version
-    private Long version;
-
 
 //    public Long getMemberId() {
 //        return  this.member.getId();

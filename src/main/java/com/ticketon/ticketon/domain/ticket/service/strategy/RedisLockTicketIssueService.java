@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Service("redis")
 @Qualifier("redis")
 @RequiredArgsConstructor
 public class RedisLockTicketIssueService implements TicketIssueStrategy{
@@ -37,7 +37,7 @@ public class RedisLockTicketIssueService implements TicketIssueStrategy{
         try {
             if (lock.tryLock(5, 3, TimeUnit.SECONDS)) {
                 Long ticketTypeId = request.getTicketTypeId();
-                TicketType ticketType = ticketTypeRepository.findById(ticketTypeId)
+                TicketType ticketType = ticketTypeRepository.findByIdForUpdate(ticketTypeId)
                         .orElseThrow(() -> new NotFoundDataException("티켓 타입 없음 (ticket_id=" + ticketTypeId + ")" ));
 
                 // 쿼리 날리지 않고 프록시로 조회

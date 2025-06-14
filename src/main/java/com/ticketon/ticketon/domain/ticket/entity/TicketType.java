@@ -53,6 +53,10 @@ public class TicketType {
     @Column(name = "status", nullable = false)
     private TicketTypeStatus status;
 
+    // 낙관적 락(Optimistic Lock) 구현을 위한 버전 관리 컬럼
+    @Version
+    private Long version;
+
 
     public void increaseIssuedQuantity() {
         validateCanIssueTicket();

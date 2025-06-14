@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("pessimistic")
 @Qualifier("pessimistic")
 @RequiredArgsConstructor
 public class PessimisticLockTicketIssueService implements TicketIssueStrategy {
