@@ -37,6 +37,11 @@ public class Ticket {
     private Long version;
 
 
+//    public Long getMemberId() {
+//        return  this.member.getId();
+//    }
+
+
     public void cancel(){
         validateCancelable();
         this.ticketStatus = TicketStatus.CANCELLED;

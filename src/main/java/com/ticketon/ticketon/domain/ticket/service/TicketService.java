@@ -75,7 +75,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new NotFoundDataException("취소하려는 티켓을 찾을 수 없습니다."));
 
         // 취소하려는 티켓이 해당 멤버 티켓이 아니라면
-        if (!ticket.getId().equals(ticketId)) throw new RuntimeException("잘못된 접근입니다.");
+        if (!ticket.getMember().getId().equals(memeberId)) throw new RuntimeException("잘못된 접근입니다.");
 
         // 티켓 취소처리
         ticket.cancel();
