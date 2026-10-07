@@ -49,6 +49,8 @@ kafka:
   topic-config:
     payment:
       name: dummy-topic
+    ticket:
+      name: dummy-ticket-topic
   admin:
     properties:
       bootstrap:

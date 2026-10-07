@@ -1,6 +1,7 @@
 package com.ticketon.ticketon.consumer;
 
-import com.ticket.exception.custom.WaitingLineRedisFlushException;
+import com.ticket.support.exception.AppException;
+import com.ticket.support.exception.ErrorType;
 import com.ticketon.ticketon.dto.EnqueuedUser;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.async.RedisAsyncCommands;
@@ -44,7 +45,7 @@ public class WaitingLineBatchWriter {
         sink.asFlux()
                 .bufferTimeout(5000, Duration.ofMillis(20))
                 .flatMap(this::writeBatchToRedis)
-                .onErrorContinue((e, o) -> {throw new WaitingLineRedisFlushException(e.getMessage());})
+                .onErrorContinue((e, o) -> {throw new AppException(ErrorType.WAITING_LINE_FLUSH_FAILED, e);})
                 .subscribe();
     }
 

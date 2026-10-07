@@ -25,6 +25,7 @@ java {
 
 dependencies {
     implementation 'org.springframework:spring-web'
+    implementation 'org.springframework.boot:spring-boot'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'

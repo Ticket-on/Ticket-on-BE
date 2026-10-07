@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {
 		RedisAutoConfiguration.class,
 		RedisRepositoriesAutoConfiguration.class,
-		RedissonAutoConfigurationV2.class // 이 녀석이 범인입니다
+		RedissonAutoConfigurationV2.class
 })
 public class TicketonApplication {
 	public static void main(String[] args) {

@@ -1,6 +1,6 @@
 package com.ticketon.ticketon.controller;
 
-import com.ticket.dto.SuccessResponse;
+import com.ticket.support.response.ApiResponse;
 import com.ticketon.ticketon.dto.EmailRequest;
 import com.ticketon.ticketon.producer.WaitingLineProducer;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class QueueController {
     }
 
     @PostMapping("/enter")
-    public Mono<ResponseEntity<SuccessResponse>> enter(@RequestBody EmailRequest request) {
+    public Mono<ResponseEntity<ApiResponse<Void>>> enter(@RequestBody EmailRequest request) {
         String email = request.email();
         kafkaQueueProducer.enqueue(email);
-        return Mono.just(ResponseEntity.ok(new SuccessResponse(true, "요청 수신 완료", null)));
+        return Mono.just(ResponseEntity.ok(ApiResponse.success()));
     }
 }

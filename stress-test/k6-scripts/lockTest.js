@@ -34,10 +34,9 @@ export default function () {
     // 2. 체크 로직 강화
     check(res, {
         '응답 성공(200/201)': (r) => r.status === 200 || r.status === 201,
-        '매진 또는 성공 메시지 확인': (r) =>
-            r.body.includes("성공") ||
-            r.body.includes("매진") ||
-            r.body.includes("Exceeded"),
+        '매진 또는 성공 응답 확인': (r) =>
+            r.json('resultType') === 'SUCCESS' ||
+            r.json('error.errorCode') === 'E3001', // TICKET_SOLD_OUT
     });
 
     // 티켓팅 상황처럼 매우 빠르게 요청을 보내기 위해 sleep을 짧게 설정
