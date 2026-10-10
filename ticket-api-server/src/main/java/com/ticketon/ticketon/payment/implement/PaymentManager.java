@@ -2,6 +2,7 @@ package com.ticketon.ticketon.payment.implement;
 
 import com.ticketon.ticketon.payment.dataaccess.entity.Payment;
 import com.ticketon.ticketon.payment.dataaccess.repository.PaymentRepository;
+import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
 import com.ticketon.ticketon.ticket.dataaccess.entity.Ticket;
 import com.ticketon.ticketon.ticket.implement.TicketReader;
@@ -26,10 +27,13 @@ public class PaymentManager {
 
     @Transactional
     public int complete(List<PaymentMessage> messages) {
-        Map<String, Ticket> tickets = ticketReader.findAllByOrderIds(
-                messages.stream().map(PaymentMessage::orderId).toList());
+        List<String> orderIds = messages.stream().map(PaymentMessage::orderId).toList();
+        Map<String, Ticket> tickets = ticketReader.findAllByOrderIds(orderIds);
+        Map<String, Payment> unknownPayments = paymentReader.findUnknownByOrderIds(orderIds);
 
         List<Payment> payments = new ArrayList<>();
+        int approvedCount = 0;
+
         for (PaymentMessage message : messages) {
             Ticket ticket = tickets.get(message.orderId());
             if (ticket == null) {
@@ -37,12 +41,22 @@ public class PaymentManager {
                 continue;
             }
             if (ticket.isPending()) {
-                payments.add(Payment.success(message, ticket.getId(), ticket.getTicketTypeId()));
+                Payment unknownPayment = unknownPayments.get(message.orderId());
+                if (unknownPayment != null) {
+                    unknownPayment.approve(message, ticket.getId());
+                    approvedCount++;
+                } else {
+                    payments.add(Payment.success(message, ticket.getId(), ticket.getTicketTypeId()));
+                }
                 ticket.markAsConfirmed();
             }
         }
         paymentRepository.saveAll(payments);
-        return payments.size();
+        return payments.size() + approvedCount;
+    }
+
+    public void saveUnknown(PaymentConfirmation confirmation, Long ticketTypeId, LocalDateTime requestedAt) {
+        paymentRepository.save(Payment.unknown(confirmation, ticketTypeId, requestedAt));
     }
 
     @Transactional

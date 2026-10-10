@@ -1,5 +1,8 @@
 package com.ticketon.ticketon.payment.business;
 
+import com.ticket.support.exception.AppException;
+import com.ticket.support.exception.ErrorType;
+import com.ticketon.ticketon.payment.dataaccess.entity.PaymentStatus;
 import com.ticketon.ticketon.payment.implement.PaymentManager;
 import com.ticketon.ticketon.payment.implement.PaymentReader;
 import com.ticketon.ticketon.payment.implement.gateway.PaymentGateway;
@@ -10,6 +13,7 @@ import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PaymentInfo;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
 import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
+import com.ticketon.ticketon.ticket.vo.PendingTicket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,17 +33,31 @@ public class PaymentService {
     private final PendingTicketManager pendingTicketManager;
 
     public PaymentMessage confirm(PaymentConfirmation confirmation) {
-        pendingTicketManager.getPayable(confirmation.orderId());
+        PendingTicket pendingTicket = pendingTicketManager.getPayable(confirmation.orderId());
 
-        LocalDateTime now = LocalDateTime.now();
-        PaymentApproval approval = new PaymentApproval("test-key", confirmation.orderId(), 10000, now, now);
-//        PaymentApproval approval = paymentGateway.requestPaymentConfirm(confirmation);
+        PaymentApproval approval = requestConfirm(confirmation, pendingTicket);
         PaymentMessage message = PaymentMessage.of(confirmation, approval);
 
         pendingTicketManager.markPaid(confirmation.orderId());
         outboxWriter.savePaymentConfirmed(message);
         log.info("[결제 승인 : 완료]: orderId={} | memberId={}", confirmation.orderId(), confirmation.memberId());
         return message;
+    }
+
+    private PaymentApproval requestConfirm(PaymentConfirmation confirmation, PendingTicket pendingTicket) {
+        LocalDateTime requestedAt = LocalDateTime.now();
+        try {
+            return paymentGateway.requestPaymentConfirm(confirmation);
+        } catch (AppException e) {
+            if (PaymentStatus.ofConfirmFailure(e.getErrorType()) == PaymentStatus.FAILED) {
+                log.warn("[결제 승인 : 실패 확정]: orderId={} | errorType={}", confirmation.orderId(), e.getErrorType());
+                throw e;
+            }
+            paymentManager.saveUnknown(confirmation, pendingTicket.ticketTypeId(), requestedAt);
+            pendingTicketManager.markUnknown(confirmation.orderId());
+            log.warn("[결제 승인 : 결과 불명 저장]: orderId={} | errorType={}", confirmation.orderId(), e.getErrorType());
+            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, e.getData(), e);
+        }
     }
 
     public void cancel(PaymentCancellation cancellation) {

@@ -1,5 +1,14 @@
 package com.ticketon.ticketon.payment.dataaccess.entity;
 
+import com.ticket.support.exception.ErrorType;
+
 public enum PaymentStatus {
-    SUCCESS,PAID,FAILED,CANCELED;
+    SUCCESS, PAID, FAILED, CANCELED, UNKNOWN;
+
+    public static PaymentStatus ofConfirmFailure(ErrorType errorType) {
+        if (errorType == ErrorType.PAYMENT_REJECTED) {
+            return FAILED;
+        }
+        return UNKNOWN;
+    }
 }

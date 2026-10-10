@@ -1,6 +1,7 @@
 package com.ticketon.ticketon.ticket.business;
 
 import com.ticketon.ticketon.common.utils.OrderIdGenerator;
+import com.ticketon.ticketon.payment.implement.PaymentReader;
 import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
 import com.ticketon.ticketon.ticket.implement.TicketExpiryManager;
 import com.ticketon.ticketon.ticket.implement.TicketManager;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -30,6 +32,7 @@ public class TicketService {
     private final TicketTypeReader ticketTypeReader;
     private final TicketExpiryManager ticketExpiryManager;
     private final PendingTicketManager pendingTicketManager;
+    private final PaymentReader paymentReader;
 
     public TicketOrder createOrder(Long memberId, Long ticketTypeId) {
         return TicketOrder.of(memberId, ticketTypeReader.findInfoById(ticketTypeId));
@@ -50,8 +53,11 @@ public class TicketService {
 
     public void expirePendingTickets() {
         LocalDateTime now = LocalDateTime.now();
-        List<ExpiredTicket> unpaidTickets = ticketReader.findExpired(now)
-                .stream()
+        List<ExpiredTicket> expiredTickets = ticketReader.findExpired(now);
+        Set<String> unknownOrderIds = paymentReader.findUnknownOrderIds(
+                expiredTickets.stream().map(ExpiredTicket::orderId).toList());
+        List<ExpiredTicket> unpaidTickets = expiredTickets.stream()
+                .filter(ticket -> !unknownOrderIds.contains(ticket.orderId()))
                 .filter(ticket -> !pendingTicketManager.isPaid(ticket.orderId()))
                 .toList();
 

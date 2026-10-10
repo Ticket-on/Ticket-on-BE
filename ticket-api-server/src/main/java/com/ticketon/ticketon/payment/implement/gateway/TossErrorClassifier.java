@@ -35,7 +35,7 @@ public class TossErrorClassifier {
         if (isConfirmedFailure(pgError.code())) {
             return new AppException(ErrorType.PAYMENT_REJECTED, pgError);
         }
-        // 
+        //
         if (isUnknownBusinessError(pgError.code())) {
             return new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, pgError);
         }

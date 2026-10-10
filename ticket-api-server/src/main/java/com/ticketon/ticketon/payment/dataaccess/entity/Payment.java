@@ -1,5 +1,6 @@
 package com.ticketon.ticketon.payment.dataaccess.entity;
 
+import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,7 +29,7 @@ public class Payment {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "orderId", nullable = false)
+    @Column(name = "orderId", nullable = false, unique = true)
     private String orderId;
 
     @Enumerated(EnumType.STRING)
@@ -75,6 +76,26 @@ public class Payment {
                 .requestedAt(message.requestedAt())
                 .approvedAt(message.approvedAt())
                 .build();
+    }
+
+    public static Payment unknown(PaymentConfirmation confirmation, Long ticketTypeId, LocalDateTime requestedAt) {
+        return Payment.builder()
+                .ticketTypeId(ticketTypeId)
+                .orderId(confirmation.orderId())
+                .memberId(confirmation.memberId())
+                .amount(confirmation.amount())
+                .paymentKey(confirmation.paymentKey())
+                .paymentStatus(PaymentStatus.UNKNOWN)
+                .requestedAt(requestedAt)
+                .build();
+    }
+
+    public void approve(PaymentMessage message, Long ticketId) {
+        this.ticketId = ticketId;
+        this.paymentKey = message.paymentKey();
+        this.amount = message.amount();
+        this.approvedAt = message.approvedAt();
+        this.paymentStatus = PaymentStatus.SUCCESS;
     }
 
     public void cancel(LocalDateTime canceledAt) {
