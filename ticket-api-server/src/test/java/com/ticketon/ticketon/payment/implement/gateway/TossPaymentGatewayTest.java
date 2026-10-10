@@ -6,6 +6,7 @@ import com.ticket.support.exception.ErrorType;
 import com.ticketon.ticketon.config.PaymentProperties;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PgError;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,8 @@ class TossPaymentGatewayTest {
         PaymentProperties properties = new PaymentProperties(
                 "secret", "https://api.tosspayments.com", "/v1/payments/confirm", "/v1/payments/%s/cancel");
 
-        gateway = new TossPaymentGateway(properties, builder.build(), new TossErrorClassifier(), new ObjectMapper().findAndRegisterModules());
+        gateway = new TossPaymentGateway(properties, builder.build(), new TossErrorClassifier(),
+                new ObjectMapper().findAndRegisterModules(), CircuitBreaker.ofDefaults("test"));
     }
 
     @Test

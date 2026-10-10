@@ -13,6 +13,8 @@ import com.ticketon.ticketon.payment.vo.PaymentApproval;
 import com.ticketon.ticketon.payment.vo.PaymentCancellation;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PgError;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -48,8 +50,23 @@ public class TossPaymentGateway implements PaymentGateway {
 
     private final ObjectMapper objectMapper;
 
+    private final CircuitBreaker tossConfirmCircuitBreaker;
+
+    /**
+     *  `executeSupplier`
+     *   먼저 순차적으로 Supplier로 서킷 검사를 하도록 하기 위한 함수형 인터페이스
+     */
     @Override
     public PaymentApproval requestPaymentConfirm(PaymentConfirmation confirmation) {
+        try {
+            return tossConfirmCircuitBreaker.executeSupplier(() -> confirm(confirmation));
+        } catch (CallNotPermittedException e) {
+            log.warn("[토스 결제 승인 : 서킷 오픈]: orderId={}", confirmation.orderId());
+            throw new AppException(ErrorType.PG_CIRCUIT_OPEN, e);
+        }
+    }
+
+    private PaymentApproval confirm(PaymentConfirmation confirmation) {
         TossConfirmResponse response;
         try {
             response = restClient.method(HttpMethod.POST)

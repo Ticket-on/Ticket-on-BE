@@ -35,6 +35,7 @@ public enum ErrorType {
     OUTBOX_SERIALIZATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E4004, "결제 메시지를 저장하지 못했습니다.", LogLevel.ERROR),
     PAYMENT_RESULT_UNKNOWN(HttpStatus.ACCEPTED, ErrorCode.E4005, "결제 결과를 확인하고 있습니다. 잠시 후 결제 내역을 확인해주세요.", LogLevel.WARN),
     PG_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.E4006, "결제 서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해주세요.", LogLevel.ERROR),
+    PG_CIRCUIT_OPEN(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.E4007, "결제 요청이 많아 잠시 처리할 수 없습니다. 잠시 후 다시 시도해주세요.", LogLevel.WARN),
 
     WAITING_LINE_CONSUME_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E5000, "대기열 메시지를 처리하지 못했습니다.", LogLevel.ERROR),
     WAITING_LINE_FLUSH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E5001, "대기열을 Redis 에 반영하지 못했습니다.", LogLevel.ERROR);
