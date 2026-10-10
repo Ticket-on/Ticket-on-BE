@@ -97,11 +97,11 @@ public class TossPaymentGateway implements PaymentGateway {
     private void validateConfirmed(PaymentConfirmation confirmation, TossConfirmResponse response) {
         if (response == null
                 || !DONE.equals(response.status())
-                || !Objects.equals(response.amount(), confirmation.amount())) {
+                || !Objects.equals(response.totalAmount(), confirmation.amount())) {
             log.error("[토스 결제 승인 : 응답 이상]: orderId={} | requestAmount={} | status={} | amount={}",
                     confirmation.orderId(), confirmation.amount(),
                     response != null ? response.status() : null,
-                    response != null ? response.amount() : null);
+                    response != null ? response.totalAmount() : null);
             throw new AppException(ErrorType.PAYMENT_REJECTED, new PgError("INVALID_CONFIRM_RESPONSE", "승인 응답이 요청과 일치하지 않습니다."));
         }
     }

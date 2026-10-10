@@ -106,7 +106,7 @@ class TossPaymentGatewayTest {
 
     private String successBody(String status, int amount) {
         return """
-                {"orderId":"order-1","paymentKey":"pk","amount":%d,"status":"%s",
+                {"orderId":"order-1","paymentKey":"pk","totalAmount":%d,"status":"%s",
                  "requestedAt":"2025-07-12T14:30:00+09:00","approvedAt":"2025-07-12T14:30:05+09:00"}
                 """.formatted(amount, status);
     }

@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record TossConfirmResponse(
         String orderId,
-        Integer amount,
+        Integer totalAmount,
         String paymentKey,
         OffsetDateTime requestedAt,
         OffsetDateTime approvedAt,
@@ -18,7 +18,7 @@ public record TossConfirmResponse(
         return new PaymentApproval(
                 paymentKey,
                 orderId,
-                amount,
+                totalAmount,
                 requestedAt.toLocalDateTime(),
                 approvedAt.toLocalDateTime()
         );
