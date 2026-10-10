@@ -1,5 +1,6 @@
 package com.ticketon.ticketon.payment.implement.gateway;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ticket.support.exception.AppException;
 import com.ticket.support.exception.ErrorType;
 import com.ticketon.ticketon.config.PaymentProperties;
@@ -7,9 +8,11 @@ import com.ticketon.ticketon.payment.implement.gateway.dto.TossCancelRequest;
 import com.ticketon.ticketon.payment.implement.gateway.dto.TossCancelResponse;
 import com.ticketon.ticketon.payment.implement.gateway.dto.TossConfirmRequest;
 import com.ticketon.ticketon.payment.implement.gateway.dto.TossConfirmResponse;
+import com.ticketon.ticketon.payment.implement.gateway.dto.TossErrorResponse;
 import com.ticketon.ticketon.payment.vo.PaymentApproval;
 import com.ticketon.ticketon.payment.vo.PaymentCancellation;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
+import com.ticketon.ticketon.payment.vo.PgError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -17,12 +20,15 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -30,30 +36,65 @@ import java.time.OffsetDateTime;
 public class TossPaymentGateway implements PaymentGateway {
 
     private static final String IDEMPOTENCY_KEY_HEADER = "Idempotency-Key";
+    private static final String DONE = "DONE";
 
     private final PaymentProperties paymentProperties;
 
     private final RestClient restClient;
 
+    private final TossErrorClassifier tossErrorClassifier;
+
+    private final ObjectMapper objectMapper;
+
     @Override
     public PaymentApproval requestPaymentConfirm(PaymentConfirmation confirmation) {
-        TossConfirmResponse response = restClient.method(HttpMethod.POST)
-                .uri(paymentProperties.confirmUrl())
-                .header(IDEMPOTENCY_KEY_HEADER, confirmation.orderId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(TossConfirmRequest.from(confirmation))
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, (req, res) -> {
-                    log.error("[토스 결제 승인 : 오류 응답]: orderId={} | status={} | body={}",
-                            confirmation.orderId(), res.getStatusCode(), readBody(res));
-                    throw new AppException(ErrorType.PAYMENT_CONFIRM_FAILED);
-                })
-                .body(TossConfirmResponse.class);
-
-        if (response == null) {
-            throw new AppException(ErrorType.PAYMENT_CONFIRM_FAILED);
+        TossConfirmResponse response;
+        try {
+            response = restClient.method(HttpMethod.POST)
+                    .uri(paymentProperties.confirmUrl())
+                    .header(IDEMPOTENCY_KEY_HEADER, confirmation.orderId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(TossConfirmRequest.from(confirmation))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (req, res) -> {
+                        TossErrorResponse error = readErrorBody(res);
+                        log.warn("[토스 결제 승인 : 오류 응답]: orderId={} | status={} | error={}",
+                                confirmation.orderId(), res.getStatusCode(), error);
+                        throw tossErrorClassifier.classify(res.getStatusCode(), error);
+                    })
+                    .body(TossConfirmResponse.class);
+        } catch (AppException e) {
+            throw e;
+        } catch (ResourceAccessException e) {
+            throw new AppException(ErrorType.PG_UNAVAILABLE, new PgError("NETWORK_ERROR", e.getMessage()), e);
+        } catch (RestClientException e) {
+            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, new PgError("RESPONSE_PARSE_FAILED", e.getMessage()), e);
         }
+
+        validateConfirmed(confirmation, response);
         return response.toApproval();
+    }
+
+    private void validateConfirmed(PaymentConfirmation confirmation, TossConfirmResponse response) {
+        if (response == null
+                || !DONE.equals(response.status())
+                || !Objects.equals(response.amount(), confirmation.amount())) {
+            log.error("[토스 결제 승인 : 응답 이상]: orderId={} | requestAmount={} | status={} | amount={}",
+                    confirmation.orderId(), confirmation.amount(),
+                    response != null ? response.status() : null,
+                    response != null ? response.amount() : null);
+            throw new AppException(ErrorType.PAYMENT_REJECTED, new PgError("INVALID_CONFIRM_RESPONSE", "승인 응답이 요청과 일치하지 않습니다."));
+        }
+    }
+
+    private TossErrorResponse readErrorBody(ClientHttpResponse res) throws IOException {
+        byte[] body = res.getBody().readAllBytes();
+        try {
+            return objectMapper.readValue(body, TossErrorResponse.class);
+        } catch (IOException e) {
+            log.warn("[토스 결제 승인 : 에러 바디 파싱 실패]: body={}", new String(body, StandardCharsets.UTF_8));
+            return null;
+        }
     }
 
     @Override
@@ -76,9 +117,5 @@ public class TossPaymentGateway implements PaymentGateway {
             throw new AppException(ErrorType.PAYMENT_CANCEL_FAILED);
         }
         return canceledAt.toLocalDateTime();
-    }
-
-    private String readBody(ClientHttpResponse res) throws IOException {
-        return new String(res.getBody().readAllBytes(), StandardCharsets.UTF_8);
     }
 }

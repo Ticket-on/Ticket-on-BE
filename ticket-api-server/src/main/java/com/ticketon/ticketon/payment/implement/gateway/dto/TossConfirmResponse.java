@@ -11,7 +11,8 @@ public record TossConfirmResponse(
         Integer amount,
         String paymentKey,
         OffsetDateTime requestedAt,
-        OffsetDateTime approvedAt
+        OffsetDateTime approvedAt,
+        String status
 ) {
     public PaymentApproval toApproval() {
         return new PaymentApproval(

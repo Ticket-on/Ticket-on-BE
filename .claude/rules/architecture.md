@@ -54,7 +54,7 @@ ticket/implement/
 └── TicketReader.java, TicketWriter.java, TicketManager.java, ...   # 공용
 
 payment/implement/
-├── gateway/    # PaymentGateway, TossPaymentGateway, dto/(토스 요청·응답)
+├── gateway/    # PaymentGateway, TossPaymentGateway, TossErrorClassifier, dto/(토스 요청·응답)
 └── outbox/     # OutboxWriter
 ```
 
@@ -94,7 +94,9 @@ Business 에서 PG 를 호출한 뒤 Manager(`@Transactional`)로 상태를 반�
 - `ErrorCode` 는 도메인별 번호 대역을 쓴다: Member `E1xxx`, EventItem `E2xxx`, Ticket `E3xxx`, Payment `E4xxx`, WaitingQueue `E5xxx`.
   한 번 배포된 코드는 의미를 바꾸거나 재사용하지 않는다. 쓰지 않게 되면 결번으로 남긴다.
 - 원인 예외가 있으면 `new AppException(ErrorType.XXX, e)` 로 감싸 스택트레이스를 잃지 않는다.
-- 외부 연동 실패도 `AppException` 으로 표현한다 (예: `PAYMENT_CONFIRM_FAILED`, `PAYMENT_CANCEL_FAILED`).
+- 외부 연동 실패도 `AppException` 으로 표현한다. PG 결과는 `ErrorType` 으로 구분한다.
+  `PAYMENT_REJECTED`(승인 거절 확정), `PAYMENT_RESULT_UNKNOWN`(PG 는 응답했지만 승인 여부 불명), `PG_UNAVAILABLE`(경로 이상, 서킷 집계 대상).
+  토스 원본 code·message 는 `data` 에 `PgError` 로 담는다 (클라이언트 응답에도 노출된다).
 - `ApiControllerAdvice` 는 `@RestController` 에만 적용된다. View Controller 의 예외는 에러 페이지로 간다.
 
 ## 응답 규칙
