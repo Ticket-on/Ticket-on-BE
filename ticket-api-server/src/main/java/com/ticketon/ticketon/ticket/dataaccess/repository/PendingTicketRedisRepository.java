@@ -61,6 +61,10 @@ public class PendingTicketRedisRepository {
         redisTemplate.opsForValue().set(PAYMENT_UNKNOWN_KEY_PREFIX + orderId, "true", TTL);
     }
 
+    public void deleteUnknown(String orderId) {
+        redisTemplate.delete(PAYMENT_UNKNOWN_KEY_PREFIX + orderId);
+    }
+
     public boolean isUnknown(String orderId) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(PAYMENT_UNKNOWN_KEY_PREFIX + orderId));
     }

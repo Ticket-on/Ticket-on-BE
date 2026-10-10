@@ -7,7 +7,8 @@ public record PaymentProperties(
         String secretKey,
         String baseUrl,
         String confirmEndPoint,
-        String cancelEndPoint
+        String cancelEndPoint,
+        String queryEndPoint
 ) {
     public String confirmUrl() {
         return baseUrl + confirmEndPoint;
@@ -15,5 +16,9 @@ public record PaymentProperties(
 
     public String cancelUrl(String paymentKey) {
         return String.format(baseUrl + cancelEndPoint, paymentKey);
+    }
+
+    public String queryUrl(String orderId) {
+        return String.format(baseUrl + queryEndPoint, orderId);
     }
 }

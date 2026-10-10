@@ -48,6 +48,8 @@ kafka:
       name: payment-confirm
       partitions: 3
       replicas: 1
+    payment-unknown:
+      name: payment-unknown
     waiting:
       name : waiting-topic
       partitions: 3
@@ -69,6 +71,9 @@ kafka:
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    payment-unknown-group:
+      bootstrap-servers: kafka:9092
+      group-id: payment-unknown-group
     payment-group:
       bootstrap-servers: kafka:9092
       group-id: payment-group

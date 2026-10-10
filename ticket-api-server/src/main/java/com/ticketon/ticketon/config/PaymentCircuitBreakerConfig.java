@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Configuration;
 public class PaymentCircuitBreakerConfig {
 
     private static final String TOSS_CONFIRM = "toss-confirm";
+    private static final String TOSS_QUERY = "toss-query";
 
     @Bean
     public CircuitBreaker tossConfirmCircuitBreaker(CircuitBreakerRegistry circuitBreakerRegistry) {
         return circuitBreakerRegistry.circuitBreaker(TOSS_CONFIRM);
+    }
+
+    @Bean
+    public CircuitBreaker tossQueryCircuitBreaker(CircuitBreakerRegistry circuitBreakerRegistry) {
+        return circuitBreakerRegistry.circuitBreaker(TOSS_QUERY);
     }
 }

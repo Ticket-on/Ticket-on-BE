@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class OutboxMessage {
 
     private static final String PAYMENT_CONFIRM_TOPIC = "payment-confirm";
+    private static final String PAYMENT_UNKNOWN_TOPIC = "payment-unknown";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,13 @@ public class OutboxMessage {
     public static OutboxMessage paymentConfirmed(String payload) {
         return OutboxMessage.builder()
                 .topic(PAYMENT_CONFIRM_TOPIC)
+                .payload(payload)
+                .build();
+    }
+
+    public static OutboxMessage paymentUnknown(String payload) {
+        return OutboxMessage.builder()
+                .topic(PAYMENT_UNKNOWN_TOPIC)
                 .payload(payload)
                 .build();
     }

@@ -8,6 +8,9 @@ import com.ticketon.ticketon.payment.implement.gateway.PaymentGateway;
 import com.ticketon.ticketon.payment.implement.outbox.OutboxWriter;
 import com.ticketon.ticketon.payment.vo.PaymentApproval;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
+import com.ticketon.ticketon.payment.vo.PaymentInquiry;
+import com.ticketon.ticketon.payment.vo.PaymentMessage;
+import com.ticketon.ticketon.payment.vo.PaymentUnknownEvent;
 import com.ticketon.ticketon.payment.vo.PgError;
 import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
 import com.ticketon.ticketon.ticket.vo.PendingTicket;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,6 +37,7 @@ class PaymentServiceTest {
 
     private final PaymentConfirmation confirmation = new PaymentConfirmation("pk", 1L, ORDER_ID, 10000);
     private final PgError pgError = new PgError("SOME_CODE", "msg");
+    private final PaymentUnknownEvent unknownEvent = new PaymentUnknownEvent(ORDER_ID, "pk", 1L, 10000);
 
     private PaymentGateway paymentGateway;
     private PaymentManager paymentManager;
@@ -110,5 +115,68 @@ class PaymentServiceTest {
                         e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
 
         verify(paymentManager).saveUnknown(eq(confirmation), eq(TICKET_TYPE_ID), any());
+    }
+
+    @Test
+    @DisplayName("UNKNOWN 조회 결과가 승인이면 결제 완료 처리로 넘긴다")
+    void resolveUnknownPaid() {
+        LocalDateTime now = LocalDateTime.now();
+        when(paymentGateway.inquire(ORDER_ID)).thenReturn(new PaymentInquiry(ORDER_ID, "pk", 10000, "DONE", now, now));
+
+        paymentService.resolveUnknown(unknownEvent);
+
+        verify(paymentManager).complete(List.of(new PaymentMessage("pk", 1L, ORDER_ID, 10000, now, now)));
+        verify(paymentManager, never()).failUnknown(any());
+    }
+
+    @Test
+    @DisplayName("UNKNOWN 조회 결과가 만료면 FAILED 로 바꾸고 재결제할 수 있게 마커를 지운다")
+    void resolveUnknownFailed() {
+        when(paymentGateway.inquire(ORDER_ID)).thenReturn(inquiry("EXPIRED", 10000));
+
+        paymentService.resolveUnknown(unknownEvent);
+
+        verify(paymentManager).failUnknown(ORDER_ID);
+        verify(pendingTicketManager).clearUnknown(ORDER_ID);
+        verify(paymentManager, never()).complete(any());
+    }
+
+    @Test
+    @DisplayName("아직 결과가 없으면 PAYMENT_RESULT_UNKNOWN 을 던져 다음 retry 토픽으로 넘긴다")
+    void resolveUnknownPending() {
+        when(paymentGateway.inquire(ORDER_ID)).thenReturn(PaymentInquiry.notFound(ORDER_ID));
+
+        assertThatThrownBy(() -> paymentService.resolveUnknown(unknownEvent))
+                .isInstanceOfSatisfying(AppException.class,
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
+
+        verify(paymentManager, never()).complete(any());
+        verify(paymentManager, never()).failUnknown(any());
+    }
+
+    @Test
+    @DisplayName("금액이 다르면 자동으로 확정하지 않는다")
+    void resolveUnknownAmountMismatch() {
+        when(paymentGateway.inquire(ORDER_ID)).thenReturn(inquiry("DONE", 9999));
+
+        paymentService.resolveUnknown(unknownEvent);
+
+        verify(paymentManager, never()).complete(any());
+        verify(paymentManager, never()).failUnknown(any());
+    }
+
+    @Test
+    @DisplayName("조회 자체가 실패하면 예외를 그대로 던져 retry 한다")
+    void resolveUnknownInquiryFailure() {
+        when(paymentGateway.inquire(ORDER_ID)).thenThrow(new AppException(ErrorType.PG_UNAVAILABLE));
+
+        assertThatThrownBy(() -> paymentService.resolveUnknown(unknownEvent))
+                .isInstanceOfSatisfying(AppException.class,
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PG_UNAVAILABLE));
+    }
+
+    private PaymentInquiry inquiry(String status, int totalAmount) {
+        LocalDateTime now = LocalDateTime.now();
+        return new PaymentInquiry(ORDER_ID, "pk", totalAmount, status, now, now);
     }
 }

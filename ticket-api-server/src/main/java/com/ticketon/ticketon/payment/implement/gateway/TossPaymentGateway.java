@@ -1,5 +1,6 @@
 package com.ticketon.ticketon.payment.implement.gateway;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ticket.support.exception.AppException;
 import com.ticket.support.exception.ErrorType;
@@ -12,13 +13,16 @@ import com.ticketon.ticketon.payment.implement.gateway.dto.TossErrorResponse;
 import com.ticketon.ticketon.payment.vo.PaymentApproval;
 import com.ticketon.ticketon.payment.vo.PaymentCancellation;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
+import com.ticketon.ticketon.payment.vo.PaymentInquiry;
 import com.ticketon.ticketon.payment.vo.PgError;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
@@ -50,7 +54,11 @@ public class TossPaymentGateway implements PaymentGateway {
 
     private final ObjectMapper objectMapper;
 
+    @Qualifier("tossConfirmCircuitBreaker")
     private final CircuitBreaker tossConfirmCircuitBreaker;
+
+    @Qualifier("tossQueryCircuitBreaker")
+    private final CircuitBreaker tossQueryCircuitBreaker;
 
     /**
      *  `executeSupplier`
@@ -113,6 +121,49 @@ public class TossPaymentGateway implements PaymentGateway {
         } catch (IOException e) {
             log.warn("[토스 결제 승인 : 에러 바디 파싱 실패]: body={}", new String(body, StandardCharsets.UTF_8));
             return null;
+        }
+    }
+
+    @Override
+    public PaymentInquiry inquire(String orderId) {
+        try {
+            return tossQueryCircuitBreaker.executeSupplier(() -> query(orderId));
+        } catch (CallNotPermittedException e) {
+            log.warn("[토스 결제 조회 : 서킷 오픈]: orderId={}", orderId);
+            throw new AppException(ErrorType.PG_CIRCUIT_OPEN, e);
+        }
+    }
+
+    private PaymentInquiry query(String orderId) {
+        try {
+            return restClient.get()
+                    .uri(paymentProperties.queryUrl(orderId))
+                    .exchange((req, res) -> {
+                        if (res.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
+                            return PaymentInquiry.notFound(orderId);
+                        }
+                        if (res.getStatusCode().isError()) {
+                            TossErrorResponse error = readErrorBody(res);
+                            log.warn("[토스 결제 조회 : 오류 응답]: orderId={} | status={} | error={}",
+                                    orderId, res.getStatusCode(), error);
+                            throw tossErrorClassifier.classify(res.getStatusCode(), error);
+                        }
+                        return readInquiry(orderId, res);
+                    });
+        } catch (AppException e) {
+            throw e;
+        } catch (ResourceAccessException e) {
+            throw new AppException(ErrorType.PG_UNAVAILABLE, new PgError("NETWORK_ERROR", e.getMessage()), e);
+        } catch (RestClientException e) {
+            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, new PgError("RESPONSE_PARSE_FAILED", e.getMessage()), e);
+        }
+    }
+
+    private PaymentInquiry readInquiry(String orderId, ClientHttpResponse res) throws IOException {
+        try {
+            return objectMapper.readValue(res.getBody(), TossConfirmResponse.class).toInquiry();
+        } catch (JsonProcessingException e) {
+            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, new PgError("RESPONSE_PARSE_FAILED", e.getOriginalMessage()), e);
         }
     }
 

@@ -27,6 +27,8 @@ kafka:
       name: payment-topic
       partitions: 3
       replicas: 1
+    payment-unknown:
+      name: payment-unknown
     ticket:
       name: ticket-topic
       partitions: 3
@@ -44,6 +46,9 @@ kafka:
     retry: 2
 
   consumer:
+    payment-unknown-group:
+      bootstrap-servers: localhost:9092
+      group-id: payment-unknown-group
     payment-group:
       bootstrap-servers: localhost:9092
       group-id: payment-group

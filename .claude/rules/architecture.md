@@ -65,7 +65,7 @@ payment/implement/
 - 입력 불변식은 vo 의 compact constructor 에서 검증한다 (예: `TicketOrder`, `PaymentConfirmation`).
 - 판단 로직은 가능한 한 vo·entity 같은 순수 객체에 둔다 (예: `StockDecreaseResult.from(luaResult)`, `Ticket.cancel()`).
 - Controller 는 entity 를 다루지 않는다. request → vo → (business) → vo → response 로만 흐른다.
-- Kafka·아웃박스·Redis 에 JSON 으로 저장되는 record(`NewTicketEvent`, `PaymentMessage`, `PendingTicket`)는
+- Kafka·아웃박스·Redis 에 JSON 으로 저장되는 record(`NewTicketEvent`, `PaymentMessage`, `PaymentUnknownEvent`, `PendingTicket`)는
   필드 이름이 곧 메시지 스키마다. 이름을 바꾸면 이미 쌓인 메시지를 읽지 못한다.
 
 ## Implement 계층 역할 분리

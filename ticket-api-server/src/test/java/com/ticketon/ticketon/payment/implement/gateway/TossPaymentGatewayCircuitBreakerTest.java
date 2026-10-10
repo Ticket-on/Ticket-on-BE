@@ -48,9 +48,10 @@ class TossPaymentGatewayCircuitBreakerTest {
                 .build());
 
         PaymentProperties properties = new PaymentProperties(
-                "secret", "https://api.tosspayments.com", "/v1/payments/confirm", "/v1/payments/%s/cancel");
+                "secret", "https://api.tosspayments.com", "/v1/payments/confirm", "/v1/payments/%s/cancel",
+                "/v1/payments/orders/%s");
         gateway = new TossPaymentGateway(properties, builder.build(), new TossErrorClassifier(),
-                new ObjectMapper().findAndRegisterModules(), circuitBreaker);
+                new ObjectMapper().findAndRegisterModules(), circuitBreaker, CircuitBreaker.ofDefaults("query"));
     }
 
     @Test

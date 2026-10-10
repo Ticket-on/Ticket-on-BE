@@ -50,7 +50,7 @@ fi
 echo "Registering Debezium MySQL connector..."
 
 # 템플릿 파일에서 .env 변수를 읽어 실제 JSON 파일을 생성
-envsubst < register-debezium.json.template > register-debezium.json
+envsubst "$(env | cut -d= -f1 | sed 's/^/$/')" < register-debezium.json.template > register-debezium.json
 
 # 생성된 JSON 파일을 사용해 Debezium 커넥터 등록
 curl -X POST -H "Content-Type: application/json" \

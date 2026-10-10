@@ -38,11 +38,23 @@ toss:
   base-url: https://api.tosspayments.com/v1/payments
   confirm-end-point: /confirm
   cancel-end-point: /cancel
+  query-end-point: /orders/%s
 
 resilience4j:
   circuitbreaker:
     instances:
       toss-confirm:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-failure-predicate: com.ticketon.ticketon.payment.implement.gateway.PgUnavailablePredicate
+      toss-query:
         sliding-window-type: COUNT_BASED
         sliding-window-size: 20
         minimum-number-of-calls: 10

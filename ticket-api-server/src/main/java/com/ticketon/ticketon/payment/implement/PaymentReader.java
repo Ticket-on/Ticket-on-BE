@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,16 +35,19 @@ public class PaymentReader {
                 .orElseThrow(() -> new AppException(ErrorType.NOT_FOUND_PAYMENT));
     }
 
-    public Map<String, Payment> findUnknownByOrderIds(Collection<String> orderIds) {
-        if (orderIds.isEmpty()) {
-            return Map.of();
-        }
-        return paymentRepository.findAllByOrderIdInAndPaymentStatus(orderIds, PaymentStatus.UNKNOWN)
+    public Map<String, PaymentStatus> findStatusesByOrderIds(Collection<String> orderIds) {
+        return paymentRepository.findAllByOrderIdIn(orderIds)
                 .stream()
-                .collect(Collectors.toMap(Payment::getOrderId, Function.identity()));
+                .collect(Collectors.toMap(Payment::getOrderId, Payment::getPaymentStatus));
     }
 
     public Set<String> findUnknownOrderIds(Collection<String> orderIds) {
-        return findUnknownByOrderIds(orderIds).keySet();
+        if (orderIds.isEmpty()) {
+            return Set.of();
+        }
+        return paymentRepository.findAllByOrderIdInAndPaymentStatus(orderIds, PaymentStatus.UNKNOWN)
+                .stream()
+                .map(Payment::getOrderId)
+                .collect(Collectors.toSet());
     }
 }

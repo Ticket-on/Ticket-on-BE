@@ -7,6 +7,7 @@ import com.ticket.support.exception.ErrorType;
 import com.ticketon.ticketon.payment.dataaccess.entity.OutboxMessage;
 import com.ticketon.ticketon.payment.dataaccess.repository.OutboxRepository;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
+import com.ticketon.ticketon.payment.vo.PaymentUnknownEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,17 @@ public class OutboxWriter {
             String payload = objectMapper.writeValueAsString(message);
             outboxRepository.save(OutboxMessage.paymentConfirmed(payload));
             log.info("[결제 아웃박스 : 저장 완료]: orderId={}", message.orderId());
+        } catch (JsonProcessingException e) {
+            throw new AppException(ErrorType.OUTBOX_SERIALIZATION_FAILED, e);
+        }
+    }
+
+    @Transactional
+    public void savePaymentUnknown(PaymentUnknownEvent event) {
+        try {
+            String payload = objectMapper.writeValueAsString(event);
+            outboxRepository.save(OutboxMessage.paymentUnknown(payload));
+            log.info("[결제 아웃박스 : UNKNOWN 저장 완료]: orderId={}", event.orderId());
         } catch (JsonProcessingException e) {
             throw new AppException(ErrorType.OUTBOX_SERIALIZATION_FAILED, e);
         }

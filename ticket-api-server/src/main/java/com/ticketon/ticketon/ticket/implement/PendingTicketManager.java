@@ -38,6 +38,10 @@ public class PendingTicketManager {
         pendingTicketRedisRepository.saveUnknown(orderId);
     }
 
+    public void clearUnknown(String orderId) {
+        pendingTicketRedisRepository.deleteUnknown(orderId);
+    }
+
     public boolean isPaid(String orderId) {
         return pendingTicketRedisRepository.isPaid(orderId);
     }

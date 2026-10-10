@@ -90,14 +90,6 @@ public class Payment {
                 .build();
     }
 
-    public void approve(PaymentMessage message, Long ticketId) {
-        this.ticketId = ticketId;
-        this.paymentKey = message.paymentKey();
-        this.amount = message.amount();
-        this.approvedAt = message.approvedAt();
-        this.paymentStatus = PaymentStatus.SUCCESS;
-    }
-
     public void cancel(LocalDateTime canceledAt) {
         this.paymentStatus = PaymentStatus.CANCELED;
         this.canceledAt = canceledAt;

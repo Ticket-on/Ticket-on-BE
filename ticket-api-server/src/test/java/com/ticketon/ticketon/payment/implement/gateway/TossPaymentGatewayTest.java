@@ -5,6 +5,7 @@ import com.ticket.support.exception.AppException;
 import com.ticket.support.exception.ErrorType;
 import com.ticketon.ticketon.config.PaymentProperties;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
+import com.ticketon.ticketon.payment.vo.PaymentInquiry;
 import com.ticketon.ticketon.payment.vo.PgError;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 class TossPaymentGatewayTest {
 
     private static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
+    private static final String QUERY_URL = "https://api.tosspayments.com/v1/payments/orders/order-1";
 
     private MockRestServiceServer server;
     private TossPaymentGateway gateway;
@@ -40,10 +42,11 @@ class TossPaymentGatewayTest {
         server = MockRestServiceServer.bindTo(builder).build();
 
         PaymentProperties properties = new PaymentProperties(
-                "secret", "https://api.tosspayments.com", "/v1/payments/confirm", "/v1/payments/%s/cancel");
+                "secret", "https://api.tosspayments.com", "/v1/payments/confirm", "/v1/payments/%s/cancel",
+                "/v1/payments/orders/%s");
 
         gateway = new TossPaymentGateway(properties, builder.build(), new TossErrorClassifier(),
-                new ObjectMapper().findAndRegisterModules(), CircuitBreaker.ofDefaults("test"));
+                new ObjectMapper().findAndRegisterModules(), CircuitBreaker.ofDefaults("confirm"), CircuitBreaker.ofDefaults("query"));
     }
 
     @Test
@@ -102,6 +105,52 @@ class TossPaymentGatewayTest {
                     assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_REJECTED);
                     assertThat(e.getData()).isEqualTo(new PgError("REJECT_CARD_PAYMENT", "한도초과 혹은 잔액부족"));
                 });
+    }
+
+    @Test
+    @DisplayName("조회 결과를 PaymentInquiry 로 변환한다")
+    void inquire() {
+        server.expect(requestTo(QUERY_URL))
+                .andRespond(withSuccess(successBody("DONE", 10000), MediaType.APPLICATION_JSON));
+
+        PaymentInquiry inquiry = gateway.inquire("order-1");
+
+        assertThat(inquiry.status()).isEqualTo("DONE");
+        assertThat(inquiry.totalAmount()).isEqualTo(10000);
+        assertThat(inquiry.paymentKey()).isEqualTo("pk");
+    }
+
+    @Test
+    @DisplayName("조회 404 는 예외가 아니라 NOT_FOUND 상태로 돌려준다")
+    void inquireNotFound() {
+        server.expect(requestTo(QUERY_URL))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"code\":\"NOT_FOUND_PAYMENT\",\"message\":\"없음\"}"));
+
+        assertThat(gateway.inquire("order-1")).isEqualTo(PaymentInquiry.notFound("order-1"));
+    }
+
+    @Test
+    @DisplayName("조회 5xx 는 PG_UNAVAILABLE")
+    void inquireServerError() {
+        server.expect(requestTo(QUERY_URL))
+                .andRespond(withStatus(HttpStatus.SERVICE_UNAVAILABLE));
+
+        assertThatThrownBy(() -> gateway.inquire("order-1"))
+                .isInstanceOfSatisfying(AppException.class,
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PG_UNAVAILABLE));
+    }
+
+    @Test
+    @DisplayName("조회 응답 파싱 실패는 PAYMENT_RESULT_UNKNOWN (서킷 집계 제외)")
+    void inquireParseFailure() {
+        server.expect(requestTo(QUERY_URL))
+                .andRespond(withSuccess("{not-json", MediaType.APPLICATION_JSON));
+
+        assertThatThrownBy(() -> gateway.inquire("order-1"))
+                .isInstanceOfSatisfying(AppException.class,
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
     }
 
     private String successBody(String status, int amount) {

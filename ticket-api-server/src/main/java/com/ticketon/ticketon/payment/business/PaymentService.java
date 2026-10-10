@@ -11,7 +11,10 @@ import com.ticketon.ticketon.payment.vo.PaymentApproval;
 import com.ticketon.ticketon.payment.vo.PaymentCancellation;
 import com.ticketon.ticketon.payment.vo.PaymentConfirmation;
 import com.ticketon.ticketon.payment.vo.PaymentInfo;
+import com.ticketon.ticketon.payment.vo.PaymentInquiry;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
+import com.ticketon.ticketon.payment.vo.PaymentUnknownEvent;
+import com.ticketon.ticketon.payment.vo.UnknownResolution;
 import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
 import com.ticketon.ticketon.ticket.vo.PendingTicket;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +61,36 @@ public class PaymentService {
             log.warn("[결제 승인 : 결과 불명 저장]: orderId={} | errorType={}", confirmation.orderId(), e.getErrorType());
             throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, e.getData(), e);
         }
+    }
+
+    public void resolveUnknown(PaymentUnknownEvent event) {
+        PaymentInquiry inquiry = paymentGateway.inquire(event.orderId());
+        UnknownResolution resolution = inquiry.resolve(event.amount());
+
+        switch (resolution) {
+            case PAID -> {
+                int completedCount = paymentManager.complete(List.of(inquiry.toPaymentMessage(event.memberId())));
+                log.info("[결제 UNKNOWN 확정 : 승인]: orderId={} | completed={}", event.orderId(), completedCount);
+            }
+            case FAILED -> failUnknown(event, inquiry);
+            case CANCELED -> {
+                log.error("[결제 UNKNOWN 확정 : 외부 취소]: orderId={} | status={} | 수동 확인 필요",
+                        event.orderId(), inquiry.status());
+                failUnknown(event, inquiry);
+            }
+            case AMOUNT_MISMATCH -> log.error("[결제 UNKNOWN 확정 : 금액 불일치]: orderId={} | expected={} | actual={} | 수동 확인 필요",
+                    event.orderId(), event.amount(), inquiry.totalAmount());
+            case PENDING -> {
+                log.info("[결제 UNKNOWN 확정 : 결과 대기]: orderId={} | status={}", event.orderId(), inquiry.status());
+                throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN);
+            }
+        }
+    }
+
+    private void failUnknown(PaymentUnknownEvent event, PaymentInquiry inquiry) {
+        boolean failed = paymentManager.failUnknown(event.orderId());
+        pendingTicketManager.clearUnknown(event.orderId());
+        log.info("[결제 UNKNOWN 확정 : 미승인]: orderId={} | status={} | updated={}", event.orderId(), inquiry.status(), failed);
     }
 
     public void cancel(PaymentCancellation cancellation) {
