@@ -1,0 +1,75 @@
+time="2026-10-10T23:40:23+09:00" level=info msg="[1_normal t=0s] circuit confirm=CLOSED query=CLOSED" source=console
+time="2026-10-10T23:41:10+09:00" level=info msg="[2_pg_5xx t=46s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T23:41:13+09:00" level=info msg="[2_pg_5xx t=49s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T23:41:23+09:00" level=info msg="[2_pg_5xx t=59s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T23:41:31+09:00" level=info msg="[2_pg_5xx t=67s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T23:41:41+09:00" level=info msg="[2_pg_5xx t=77s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T23:41:42+09:00" level=info msg="[2_pg_5xx t=78s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T23:41:52+09:00" level=info msg="[2_pg_5xx t=88s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T23:42:00+09:00" level=info msg="[3_recover t=96s] circuit confirm=CLOSED query=HALF_OPEN" source=console
+time="2026-10-10T23:42:01+09:00" level=info msg="[3_recover t=97s] circuit confirm=CLOSED query=CLOSED" source=console
+time="2026-10-10T23:43:00+09:00" level=info msg="[4_pg_hang t=156s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T23:43:20+09:00" level=info msg="[4_pg_hang t=176s] circuit confirm=HALF_OPEN query=CLOSED" source=console
+time="2026-10-10T23:43:30+09:00" level=info msg="[5_recover t=186s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T23:43:40+09:00" level=info msg="[5_recover t=196s] circuit confirm=CLOSED query=CLOSED" source=console
+=== confirm outcome by phase ===
+{
+  "outcomes": {
+    "5_recover": {
+      "approved": 1336,
+      "circuit_open": 464
+    },
+    "4_pg_hang": {
+      "circuit_open": 723,
+      "unknown": 411
+    },
+    "1_normal": {
+      "approved": 1320
+    },
+    "2_pg_5xx": {
+      "unknown": 22,
+      "circuit_open": 1328
+    },
+    "3_recover": {
+      "circuit_open": 174,
+      "approved": 1176
+    }
+  },
+  "confirmLatencyMs": {
+    "1_normal": {
+      "p(99)": 342,
+      "max": 734,
+      "avg": 94,
+      "p(50)": 89,
+      "p(95)": 150
+    },
+    "4_pg_hang": {
+      "avg": 7280,
+      "p(50)": 4,
+      "p(95)": 20033,
+      "p(99)": 20517,
+      "max": 20861
+    },
+    "2_pg_5xx": {
+      "avg": 7,
+      "p(50)": 3,
+      "p(95)": 16,
+      "p(99)": 67,
+      "max": 472
+    },
+    "5_recover": {
+      "p(50)": 74,
+      "p(95)": 169,
+      "p(99)": 864,
+      "max": 1470,
+      "avg": 87
+    },
+    "3_recover": {
+      "avg": 76,
+      "p(50)": 77,
+      "p(95)": 129,
+      "p(99)": 217,
+      "max": 390
+    }
+  }
+}

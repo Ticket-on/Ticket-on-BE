@@ -1,0 +1,118 @@
+{
+  "pg": {
+    "approved": 3768,
+    "confirmStats": {
+      "1_normal": {
+        "approved": 1319
+      },
+      "2_pg_5xx": {
+        "503": 18,
+        "approved": 1,
+        "approved_then_503": 4
+      },
+      "3_recover": {
+        "approved": 1174
+      },
+      "4_pg_hang": {
+        "approved": 1,
+        "approved_then_hang": 201,
+        "hang": 199
+      },
+      "5_recover": {
+        "hang": 7,
+        "approved_then_hang": 4,
+        "approved": 1030
+      },
+      "after": {
+        "approved": 34
+      }
+    },
+    "queryStats": {
+      "2_pg_5xx": {
+        "503": 13,
+        "approved_then_503": 4
+      },
+      "3_recover": {
+        "not_found": 9,
+        "done": 3
+      },
+      "5_recover": {
+        "hang": 2,
+        "approved_then_hang": 1,
+        "done": 205,
+        "not_found": 206
+      }
+    }
+  },
+  "db": {
+    "paymentStatus": {
+      "SUCCESS": 2899,
+      "UNKNOWN": 10,
+      "FAILED": 215
+    },
+    "ticketStatus": {
+      "PENDING": 4086,
+      "CONFIRMED": 2899
+    }
+  },
+  "invariants": {
+    "moneyWithoutTicket": 868,
+    "ticketWithoutMoney": 0,
+    "confirmedTicketWithoutSuccess": 0,
+    "pgApprovedButStillUnknown": 1
+  },
+  "samples": {
+    "moneyWithoutTicket": [
+      {
+        "orderId": "01M4Q7RDFBK32RSNN712X4JZPP",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4Q7RD84HBV3XP1VR7FWT29W",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4Q7RD8YHJ17HF4JJKBBED3M",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4Q7RD9Z3KCZP0EBMWJ0EHCM",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4Q7RD8437R3WAK8X670GQQP",
+        "payment": null,
+        "ticket": "PENDING"
+      }
+    ],
+    "ticketWithoutMoney": [],
+    "confirmedTicketWithoutSuccess": []
+  },
+  "kafkaTopicMessages": {
+    "payment-confirm": 22262,
+    "payment-unknown": 2605,
+    "payment-unknown-dlt": 76,
+    "payment-unknown-retry": 73,
+    "payment-unknown-retry-120000": 13,
+    "payment-unknown-retry-30000": 34,
+    "payment-unknown-retry-5000": 46
+  },
+  "circuitBreakers": {
+    "toss-confirm": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    },
+    "toss-query": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "outcomes": {
+    "5_recover": {
+      "circuit_open": 465,
+      "approved": 1335
+    },
+    "2_pg_5xx": {
+      "unknown": 22,
+      "circuit_open": 1327
+    },
+    "1_normal": {
+      "approved": 1320
+    },
+    "4_pg_hang": {
+      "circuit_open": 724,
+      "unknown": 410
+    },
+    "3_recover": {
+      "approved": 1174,
+      "circuit_open": 176,
+      "unknown": 1
+    }
+  },
+  "confirmLatencyMs": {
+    "4_pg_hang": {
+      "avg": 7246,
+      "p(50)": 3,
+      "p(95)": 20031,
+      "p(99)": 20124,
+      "max": 20447
+    },
+    "5_recover": {
+      "max": 550,
+      "avg": 65,
+      "p(50)": 68,
+      "p(95)": 124,
+      "p(99)": 180
+    },
+    "2_pg_5xx": {
+      "p(99)": 37,
+      "max": 138,
+      "avg": 4,
+      "p(50)": 3,
+      "p(95)": 8
+    },
+    "3_recover": {
+      "max": 20037,
+      "avg": 88,
+      "p(50)": 77,
+      "p(95)": 123,
+      "p(99)": 133
+    },
+    "1_normal": {
+      "p(99)": 176,
+      "max": 276,
+      "avg": 85,
+      "p(50)": 85,
+      "p(95)": 125
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "pg": {
+    "approved": 3986,
+    "confirmStats": {
+      "1_normal": {
+        "approved": 1318
+      },
+      "2_pg_5xx": {
+        "503": 19,
+        "approved": 2,
+        "approved_then_503": 4
+      },
+      "3_recover": {
+        "approved": 1181
+      },
+      "4_pg_hang": {
+        "approved": 2,
+        "hang": 209,
+        "approved_then_hang": 191
+      },
+      "5_recover": {
+        "hang": 9,
+        "approved_then_hang": 2,
+        "approved": 1186
+      },
+      "after": {
+        "approved": 100
+      }
+    },
+    "queryStats": {
+      "2_pg_5xx": {
+        "503": 11,
+        "approved_then_503": 5
+      },
+      "3_recover": {
+        "not_found": 10,
+        "done": 3
+      },
+      "5_recover": {
+        "approved_then_hang": 2,
+        "not_found": 195,
+        "done": 133
+      },
+      "after": {
+        "not_found": 68,
+        "done": 61
+      }
+    }
+  },
+  "db": {
+    "paymentStatus": {
+      "SUCCESS": 3987,
+      "UNKNOWN": 8
+    },
+    "ticketStatus": {
+      "CONFIRMED": 3987,
+      "PENDING": 2997
+    }
+  },
+  "invariants": {
+    "moneyWithoutTicket": 0,
+    "ticketWithoutMoney": 1,
+    "confirmedTicketWithoutSuccess": 0,
+    "pgApprovedButStillUnknown": 0
+  },
+  "samples": {
+    "moneyWithoutTicket": [],
+    "ticketWithoutMoney": [
+      "01M4JM388H24F0P10N614E0F1F"
+    ],
+    "confirmedTicketWithoutSuccess": []
+  },
+  "redisUnknownMarkers": 434,
+  "kafkaTopicMessages": {
+    "payment-confirm": 3561,
+    "payment-unknown": 434,
+    "payment-unknown-dlt": 8,
+    "payment-unknown-retry-120000": 13,
+    "payment-unknown-retry-30000": 34,
+    "payment-unknown-retry-5000": 46
+  },
+  "circuitBreakers": {
+    "toss-confirm": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    },
+    "toss-query": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    }
+  }
+}

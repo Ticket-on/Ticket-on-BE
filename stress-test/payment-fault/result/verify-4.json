@@ -1,0 +1,92 @@
+{
+  "pg": {
+    "approved": 4073,
+    "confirmStats": {
+      "1_normal": {
+        "approved": 1317
+      },
+      "2_pg_5xx": {
+        "503": 15,
+        "approved": 3,
+        "approved_then_503": 7
+      },
+      "3_recover": {
+        "approved": 1174
+      },
+      "4_pg_hang": {
+        "approved": 2,
+        "hang": 202,
+        "approved_then_hang": 198
+      },
+      "5_recover": {
+        "approved_then_hang": 5,
+        "hang": 6,
+        "approved": 1332
+      },
+      "after": {
+        "approved": 35
+      }
+    },
+    "queryStats": {
+      "2_pg_5xx": {
+        "503": 9,
+        "approved_then_503": 7
+      },
+      "3_recover": {
+        "not_found": 5,
+        "done": 4
+      },
+      "5_recover": {
+        "approved_then_hang": 2,
+        "done": 203,
+        "not_found": 208
+      }
+    }
+  },
+  "db": {
+    "paymentStatus": {
+      "SUCCESS": 4070,
+      "UNKNOWN": 13,
+      "FAILED": 213
+    },
+    "ticketStatus": {
+      "CONFIRMED": 4070,
+      "PENDING": 2915
+    }
+  },
+  "invariants": {
+    "moneyWithoutTicket": 0,
+    "ticketWithoutMoney": 0,
+    "confirmedTicketWithoutSuccess": 0,
+    "pgApprovedButStillUnknown": 3
+  },
+  "samples": {
+    "moneyWithoutTicket": [],
+    "ticketWithoutMoney": [],
+    "confirmedTicketWithoutSuccess": []
+  },
+  "redisUnknownMarkers": 220,
+  "kafkaTopicMessages": {
+    "payment-confirm": 15144,
+    "payment-unknown": 1733,
+    "payment-unknown-dlt": 48,
+    "payment-unknown-retry": 73,
+    "payment-unknown-retry-120000": 13,
+    "payment-unknown-retry-30000": 34,
+    "payment-unknown-retry-5000": 46
+  },
+  "circuitBreakers": {
+    "toss-confirm": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    },
+    "toss-query": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    }
+  }
+}
