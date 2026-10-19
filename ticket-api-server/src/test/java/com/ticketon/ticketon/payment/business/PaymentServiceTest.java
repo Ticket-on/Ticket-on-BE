@@ -15,6 +15,7 @@ import com.ticketon.ticketon.payment.vo.PgError;
 import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
 import com.ticketon.ticketon.ticket.vo.PendingTicket;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -82,7 +84,6 @@ class PaymentServiceTest {
                         e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_REJECTED));
 
         verify(paymentManager, never()).saveUnknown(any(), any(), any());
-        verify(pendingTicketManager, never()).markUnknown(any());
         verify(pendingTicketManager, never()).markPaid(any());
     }
 
@@ -99,7 +100,6 @@ class PaymentServiceTest {
                 });
 
         verify(paymentManager).saveUnknown(eq(confirmation), eq(TICKET_TYPE_ID), any());
-        verify(pendingTicketManager).markUnknown(ORDER_ID);
         verify(pendingTicketManager, never()).markPaid(any());
         verify(outboxWriter, never()).savePaymentConfirmed(any());
     }
@@ -118,6 +118,19 @@ class PaymentServiceTest {
     }
 
     @Test
+    @DisplayName("결과 확인 중인 주문에 다시 승인 요청이 와서 UNKNOWN 저장이 중복되면 500 대신 PAYMENT_RESULT_UNKNOWN 으로 응답한다")
+    void duplicateUnknownStillAccepted() {
+        when(paymentGateway.requestPaymentConfirm(confirmation))
+                .thenThrow(new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, pgError));
+        doThrow(new DataIntegrityViolationException("duplicate"))
+                .when(paymentManager).saveUnknown(eq(confirmation), eq(TICKET_TYPE_ID), any());
+
+        assertThatThrownBy(() -> paymentService.confirm(confirmation))
+                .isInstanceOfSatisfying(AppException.class,
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
+    }
+
+    @Test
     @DisplayName("UNKNOWN 조회 결과가 승인이면 결제 완료 처리로 넘긴다")
     void resolveUnknownPaid() {
         LocalDateTime now = LocalDateTime.now();
@@ -130,21 +143,33 @@ class PaymentServiceTest {
     }
 
     @Test
-    @DisplayName("UNKNOWN 조회 결과가 만료면 FAILED 로 바꾸고 재결제할 수 있게 마커를 지운다")
+    @DisplayName("UNKNOWN 조회 결과가 만료면 FAILED 로 바꾸고 같은 주문으로는 재결제하지 못하게 결제 대기를 닫는다")
     void resolveUnknownFailed() {
         when(paymentGateway.inquire(ORDER_ID)).thenReturn(inquiry("EXPIRED", 10000));
 
         paymentService.resolveUnknown(unknownEvent);
 
         verify(paymentManager).failUnknown(ORDER_ID);
-        verify(pendingTicketManager).clearUnknown(ORDER_ID);
+        verify(pendingTicketManager).delete(ORDER_ID);
         verify(paymentManager, never()).complete(any());
     }
 
     @Test
-    @DisplayName("아직 결과가 없으면 PAYMENT_RESULT_UNKNOWN 을 던져 다음 retry 토픽으로 넘긴다")
-    void resolveUnknownPending() {
+    @DisplayName("토스에 결제가 없으면 FAILED 로 바꾸고 같은 주문으로는 재결제하지 못하게 결제 대기를 닫는다")
+    void resolveUnknownNotFound() {
         when(paymentGateway.inquire(ORDER_ID)).thenReturn(PaymentInquiry.notFound(ORDER_ID));
+
+        paymentService.resolveUnknown(unknownEvent);
+
+        verify(paymentManager).failUnknown(ORDER_ID);
+        verify(pendingTicketManager).delete(ORDER_ID);
+        verify(paymentManager, never()).complete(any());
+    }
+
+    @Test
+    @DisplayName("승인이 진행 중이면 PAYMENT_RESULT_UNKNOWN 을 던져 retry 토픽으로 넘긴다")
+    void resolveUnknownPending() {
+        when(paymentGateway.inquire(ORDER_ID)).thenReturn(inquiry("IN_PROGRESS", 10000));
 
         assertThatThrownBy(() -> paymentService.resolveUnknown(unknownEvent))
                 .isInstanceOfSatisfying(AppException.class,

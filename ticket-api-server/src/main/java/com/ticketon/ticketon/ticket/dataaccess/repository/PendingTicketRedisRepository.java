@@ -18,7 +18,6 @@ public class PendingTicketRedisRepository {
 
     private static final String TICKET_KEY_PREFIX = "ticket_request:";
     private static final String PAYMENT_KEY_PREFIX = "payment_success:";
-    private static final String PAYMENT_UNKNOWN_KEY_PREFIX = "payment_unknown:";
     private static final Duration TTL = Duration.ofMinutes(10L);
 
     private final StringRedisTemplate redisTemplate;
@@ -57,15 +56,4 @@ public class PendingTicketRedisRepository {
         return Boolean.TRUE.equals(redisTemplate.hasKey(PAYMENT_KEY_PREFIX + orderId));
     }
 
-    public void saveUnknown(String orderId) {
-        redisTemplate.opsForValue().set(PAYMENT_UNKNOWN_KEY_PREFIX + orderId, "true", TTL);
-    }
-
-    public void deleteUnknown(String orderId) {
-        redisTemplate.delete(PAYMENT_UNKNOWN_KEY_PREFIX + orderId);
-    }
-
-    public boolean isUnknown(String orderId) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(PAYMENT_UNKNOWN_KEY_PREFIX + orderId));
-    }
 }

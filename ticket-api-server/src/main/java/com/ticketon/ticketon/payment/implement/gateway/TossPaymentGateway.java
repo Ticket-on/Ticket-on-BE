@@ -110,7 +110,7 @@ public class TossPaymentGateway implements PaymentGateway {
                     confirmation.orderId(), confirmation.amount(),
                     response != null ? response.status() : null,
                     response != null ? response.totalAmount() : null);
-            throw new AppException(ErrorType.PAYMENT_REJECTED, new PgError("INVALID_CONFIRM_RESPONSE", "승인 응답이 요청과 일치하지 않습니다."));
+            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, new PgError("INVALID_CONFIRM_RESPONSE", "승인 응답이 요청과 일치하지 않습니다."));
         }
     }
 

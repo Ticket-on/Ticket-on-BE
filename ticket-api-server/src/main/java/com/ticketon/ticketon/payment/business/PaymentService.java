@@ -19,6 +19,7 @@ import com.ticketon.ticketon.ticket.implement.PendingTicketManager;
 import com.ticketon.ticketon.ticket.vo.PendingTicket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -56,10 +57,17 @@ public class PaymentService {
                 log.warn("[결제 승인 : 실패 확정]: orderId={} | errorType={}", confirmation.orderId(), e.getErrorType());
                 throw e;
             }
-            paymentManager.saveUnknown(confirmation, pendingTicket.ticketTypeId(), requestedAt);
-            pendingTicketManager.markUnknown(confirmation.orderId());
-            log.warn("[결제 승인 : 결과 불명 저장]: orderId={} | errorType={}", confirmation.orderId(), e.getErrorType());
+            saveUnknown(confirmation, pendingTicket, requestedAt, e);
             throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN, e.getData(), e);
+        }
+    }
+
+    private void saveUnknown(PaymentConfirmation confirmation, PendingTicket pendingTicket, LocalDateTime requestedAt, AppException cause) {
+        try {
+            paymentManager.saveUnknown(confirmation, pendingTicket.ticketTypeId(), requestedAt);
+            log.warn("[결제 승인 : 결과 불명 저장]: orderId={} | errorType={}", confirmation.orderId(), cause.getErrorType());
+        } catch (DataIntegrityViolationException duplicate) {
+            log.warn("[결제 승인 : 이미 결과 확인 중]: orderId={} | errorType={}", confirmation.orderId(), cause.getErrorType());
         }
     }
 
@@ -89,7 +97,7 @@ public class PaymentService {
 
     private void failUnknown(PaymentUnknownEvent event, PaymentInquiry inquiry) {
         boolean failed = paymentManager.failUnknown(event.orderId());
-        pendingTicketManager.clearUnknown(event.orderId());
+        pendingTicketManager.delete(event.orderId());
         log.info("[결제 UNKNOWN 확정 : 미승인]: orderId={} | status={} | updated={}", event.orderId(), inquiry.status(), failed);
     }
 

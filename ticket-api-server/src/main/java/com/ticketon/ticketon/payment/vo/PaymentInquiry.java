@@ -14,7 +14,7 @@ public record PaymentInquiry(
 ) {
     private static final String NOT_FOUND = "NOT_FOUND";
     private static final String DONE = "DONE";
-    private static final Set<String> FAILED_STATUSES = Set.of("ABORTED", "EXPIRED");
+    private static final Set<String> FAILED_STATUSES = Set.of("ABORTED", "EXPIRED", "READY", NOT_FOUND);
     private static final Set<String> CANCELED_STATUSES = Set.of("CANCELED", "PARTIAL_CANCELED");
 
     public static PaymentInquiry notFound(String orderId) {

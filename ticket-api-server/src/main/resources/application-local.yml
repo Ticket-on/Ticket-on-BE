@@ -24,7 +24,7 @@ kafka:
       bootstrap.servers: localhost:9092
   topic-config:
     payment:
-      name: payment-topic
+      name: payment-confirm
       partitions: 3
       replicas: 1
     payment-unknown:

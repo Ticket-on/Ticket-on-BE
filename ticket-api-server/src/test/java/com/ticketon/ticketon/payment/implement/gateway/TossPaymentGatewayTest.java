@@ -60,14 +60,14 @@ class TossPaymentGatewayTest {
     }
 
     @Test
-    @DisplayName("2xx 인데 금액이 다르면 PAYMENT_REJECTED")
+    @DisplayName("2xx 인데 금액이 다르면 돈이 빠져나갔을 수 있으므로 PAYMENT_RESULT_UNKNOWN")
     void amountMismatch() {
         server.expect(requestTo(CONFIRM_URL))
                 .andRespond(withSuccess(successBody("DONE", 9999), MediaType.APPLICATION_JSON));
 
         assertThatThrownBy(() -> gateway.requestPaymentConfirm(confirmation))
                 .isInstanceOfSatisfying(AppException.class,
-                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_REJECTED));
+                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
     }
 
     @Test

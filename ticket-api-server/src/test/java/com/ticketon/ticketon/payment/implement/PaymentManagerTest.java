@@ -5,6 +5,8 @@ import com.ticketon.ticketon.payment.dataaccess.repository.PaymentRepository;
 import com.ticketon.ticketon.payment.implement.outbox.OutboxWriter;
 import com.ticketon.ticketon.payment.vo.PaymentMessage;
 import com.ticketon.ticketon.ticket.dataaccess.entity.Ticket;
+import com.ticketon.ticketon.ticket.dataaccess.entity.TicketStatus;
+import com.ticketon.ticketon.ticket.dataaccess.entity.TicketType;
 import com.ticketon.ticketon.ticket.implement.TicketReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -87,5 +90,21 @@ class PaymentManagerTest {
 
         verify(paymentRepository, never()).approveUnknown(any(), any(), any(), any(), any());
         verify(ticket, never()).markAsConfirmed();
+    }
+
+    @Test
+    @DisplayName("Debezium 재전송으로 같은 orderId 가 한 배치에 두 번 와도 결제 행은 하나만 저장한다")
+    void savesOnceForDuplicateInBatch() {
+        Ticket pendingTicket = Ticket.builder()
+                .ticketType(mock(TicketType.class))
+                .ticketStatus(TicketStatus.PENDING)
+                .orderId(ORDER_ID)
+                .build();
+        when(ticketReader.findAllByOrderIds(anyList())).thenReturn(Map.of(ORDER_ID, pendingTicket));
+        when(paymentReader.findStatusesByOrderIds(anyList())).thenReturn(Map.of());
+
+        assertThat(paymentManager.complete(List.of(message, message))).isEqualTo(1);
+
+        verify(paymentRepository, times(1)).saveAll(argThat(payments -> payments.spliterator().getExactSizeIfKnown() == 1));
     }
 }

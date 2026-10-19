@@ -16,9 +16,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
+import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.kafka.support.serializer.DeserializationException;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.util.backoff.FixedBackOff;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
@@ -29,6 +29,11 @@ import java.util.Map;
 @EnableKafka
 @Slf4j
 public class PaymentConsumerConfig {
+
+    private static final int MAX_RETRIES = 5;
+    private static final long INITIAL_BACKOFF_MS = 2_000L;
+    private static final double BACKOFF_MULTIPLIER = 2.0;
+    private static final long MAX_BACKOFF_MS = 30_000L;
 
     @Value("${kafka.consumer.payment-group.bootstrap-servers}")
     private String bootstrapServers;
@@ -71,13 +76,16 @@ public class PaymentConsumerConfig {
         DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate,
                 (r, e) -> new TopicPartition(r.topic() + ".DLT", r.partition()));
 
-        FixedBackOff backOff = new FixedBackOff(3000L, 3L);
+        ExponentialBackOffWithMaxRetries backOff = new ExponentialBackOffWithMaxRetries(MAX_RETRIES);
+        backOff.setInitialInterval(INITIAL_BACKOFF_MS);
+        backOff.setMultiplier(BACKOFF_MULTIPLIER);
+        backOff.setMaxInterval(MAX_BACKOFF_MS);
 
         DefaultErrorHandler handler = new DefaultErrorHandler(recoverer, backOff);
 
         handler.addNotRetryableExceptions(DeserializationException.class, MethodArgumentNotValidException.class);
         handler.setRetryListeners((record, ex, deliveryAttempt) -> {
-            if (deliveryAttempt > 3) {
+            if (deliveryAttempt > MAX_RETRIES) {
                 log.error("[결제 컨슈머 : DLT 전송]: payload={} | error={}", record.value(), ex.getMessage());
             }
         });

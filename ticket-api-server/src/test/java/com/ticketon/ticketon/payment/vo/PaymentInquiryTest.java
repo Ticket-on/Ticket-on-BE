@@ -20,7 +20,7 @@ class PaymentInquiryTest {
             "CANCELED,            CANCELED",
             "PARTIAL_CANCELED,    CANCELED",
             "IN_PROGRESS,         PENDING",
-            "READY,               PENDING",
+            "READY,               FAILED",
             "WAITING_FOR_DEPOSIT, PENDING",
             "SOME_NEW_STATUS,     PENDING",
     })
@@ -42,9 +42,9 @@ class PaymentInquiryTest {
     }
 
     @Test
-    @DisplayName("토스에 결제가 없으면 PENDING")
+    @DisplayName("토스에 결제가 없으면 승인 요청이 닿지 않은 것이므로 FAILED")
     void notFound() {
-        assertThat(PaymentInquiry.notFound("order-1").resolve(AMOUNT)).isEqualTo(UnknownResolution.PENDING);
+        assertThat(PaymentInquiry.notFound("order-1").resolve(AMOUNT)).isEqualTo(UnknownResolution.FAILED);
     }
 
     private PaymentInquiry inquiry(String status, int totalAmount) {

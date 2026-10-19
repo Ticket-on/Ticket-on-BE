@@ -22,24 +22,12 @@ public class PendingTicketManager {
     }
 
     public PendingTicket getPayable(String orderId) {
-        PendingTicket pendingTicket = pendingTicketRedisRepository.find(orderId)
+        return pendingTicketRedisRepository.find(orderId)
                 .orElseThrow(() -> new AppException(ErrorType.PAYMENT_RESERVATION_EXPIRED));
-        if (pendingTicketRedisRepository.isUnknown(orderId)) {
-            throw new AppException(ErrorType.PAYMENT_RESULT_UNKNOWN);
-        }
-        return pendingTicket;
     }
 
     public void markPaid(String orderId) {
         pendingTicketRedisRepository.savePaid(orderId);
-    }
-
-    public void markUnknown(String orderId) {
-        pendingTicketRedisRepository.saveUnknown(orderId);
-    }
-
-    public void clearUnknown(String orderId) {
-        pendingTicketRedisRepository.deleteUnknown(orderId);
     }
 
     public boolean isPaid(String orderId) {

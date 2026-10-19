@@ -39,15 +39,4 @@ class PendingTicketManagerTest {
                 .isInstanceOfSatisfying(AppException.class,
                         e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESERVATION_EXPIRED));
     }
-
-    @Test
-    @DisplayName("결과 불명인 주문은 다시 승인하지 않고 PAYMENT_RESULT_UNKNOWN")
-    void unknown() {
-        when(repository.find(ORDER_ID)).thenReturn(Optional.of(PendingTicket.of(ORDER_ID, 7L, 1L)));
-        when(repository.isUnknown(ORDER_ID)).thenReturn(true);
-
-        assertThatThrownBy(() -> manager.getPayable(ORDER_ID))
-                .isInstanceOfSatisfying(AppException.class,
-                        e -> assertThat(e.getErrorType()).isEqualTo(ErrorType.PAYMENT_RESULT_UNKNOWN));
-    }
 }
