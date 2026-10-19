@@ -29,6 +29,6 @@ export default function () {
 
   check(res, {
     'status is 200': (r) => r.status === 200,
-    'contains 요청 수신 완료': (r) => r.body.includes('요청 수신 완료'),
+    'resultType SUCCESS': (r) => r.json('resultType') === 'SUCCESS',
   });
 }

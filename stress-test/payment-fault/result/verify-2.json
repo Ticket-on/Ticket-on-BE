@@ -1,0 +1,119 @@
+{
+  "pg": {
+    "approved": 4080,
+    "confirmStats": {
+      "1_normal": {
+        "approved": 1317
+      },
+      "2_pg_5xx": {
+        "503": 18,
+        "approved": 2,
+        "approved_then_503": 4
+      },
+      "3_recover": {
+        "approved": 1174
+      },
+      "4_pg_hang": {
+        "approved": 1,
+        "approved_then_hang": 210,
+        "hang": 189
+      },
+      "5_recover": {
+        "approved_then_hang": 5,
+        "hang": 6,
+        "approved": 1332
+      },
+      "after": {
+        "approved": 35
+      }
+    },
+    "queryStats": {
+      "2_pg_5xx": {
+        "503": 9,
+        "approved_then_503": 7
+      },
+      "3_recover": {
+        "done": 2,
+        "not_found": 7
+      },
+      "5_recover": {
+        "hang": 1,
+        "done": 215,
+        "not_found": 195,
+        "approved_then_hang": 1
+      }
+    }
+  },
+  "db": {
+    "paymentStatus": {
+      "UNKNOWN": 13,
+      "SUCCESS": 2759,
+      "FAILED": 202
+    },
+    "ticketStatus": {
+      "PENDING": 4225,
+      "CONFIRMED": 2759
+    }
+  },
+  "invariants": {
+    "moneyWithoutTicket": 1319,
+    "ticketWithoutMoney": 0,
+    "confirmedTicketWithoutSuccess": 0,
+    "pgApprovedButStillUnknown": 2
+  },
+  "samples": {
+    "moneyWithoutTicket": [
+      {
+        "orderId": "01M4JX5ZT7GEM8B5VH72ZQRTWP",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4JX5ZNF6Z4PABH3275MJNRY",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4JX5ZNFJTVMXTA2NJJSYMKB",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4JX5ZNF4FQ40EPA1VKX22ET",
+        "payment": null,
+        "ticket": "PENDING"
+      },
+      {
+        "orderId": "01M4JX5ZXBYTRERRA85BC1E53V",
+        "payment": null,
+        "ticket": "PENDING"
+      }
+    ],
+    "ticketWithoutMoney": [],
+    "confirmedTicketWithoutSuccess": []
+  },
+  "redisUnknownMarkers": 230,
+  "kafkaTopicMessages": {
+    "payment-confirm": 7422,
+    "payment-unknown": 866,
+    "payment-unknown-dlt": 21,
+    "payment-unknown-retry": 24,
+    "payment-unknown-retry-120000": 13,
+    "payment-unknown-retry-30000": 34,
+    "payment-unknown-retry-5000": 46
+  },
+  "circuitBreakers": {
+    "toss-confirm": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    },
+    "toss-query": {
+      "state": "CLOSED",
+      "failureRate": "0.0%",
+      "slowCallRate": "0.0%",
+      "notPermitted": 0
+    }
+  }
+}

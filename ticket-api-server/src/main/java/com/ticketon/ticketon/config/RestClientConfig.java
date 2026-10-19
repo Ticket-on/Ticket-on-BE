@@ -1,5 +1,6 @@
 package com.ticketon.ticketon.config;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -11,10 +12,11 @@ import java.time.Duration;
 import java.util.Base64;
 
 @Configuration
+@EnableConfigurationProperties(PaymentProperties.class)
 public class RestClientConfig {
 
-    private static final int CONNECTION_TIMEOUT_SECONDS = 3;
-    private static final int READ_TIMEOUT_SECONDS = 7;
+    private static final int CONNECTION_TIMEOUT_SECONDS = 5;
+    private static final int READ_TIMEOUT_SECONDS = 20;
 
     @Bean
     public RestClient restClient(PaymentProperties paymentProperties) {
@@ -29,7 +31,7 @@ public class RestClientConfig {
     }
 
     private String createPaymentAuthHeader(PaymentProperties paymentProperties) {
-        String credentials = paymentProperties.getSecretKey() + ":";
+        String credentials = paymentProperties.secretKey() + ":";
         byte[] encoded = Base64.getEncoder().encode(credentials.getBytes(StandardCharsets.UTF_8));
         return "Basic " + new String(encoded, StandardCharsets.UTF_8);
     }

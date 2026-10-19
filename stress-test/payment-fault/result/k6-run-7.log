@@ -1,0 +1,1059 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: payment-fault.js
+        output: -
+
+     scenarios: (100.00%) 2 scenarios, 2001 max VUs, 4m30s max duration (incl. graceful stop):
+              * buyers: 30.00 iterations/s for 4m0s (maxVUs: 200-2000, exec: buy, gracefulStop: 30s)
+              * observer: 1 looping VUs for 4m0s (exec: observe, gracefulStop: 30s)
+
+time="2026-10-12T14:16:56+09:00" level=info msg="[1_normal t=0s] circuit confirm=CLOSED query=CLOSED" source=console
+
+running (0m01.0s), 0029/0201 VUs, 0 complete and 0 interrupted iterations
+buyers     [   0% ] 0028/0200 VUs  0m00.9s/4m0s  30.00 iters/s
+observer   [   0% ] 1 VUs          0m00.9s/4m0s 
+
+running (0m02.0s), 0034/0201 VUs, 26 complete and 0 interrupted iterations
+buyers     [   1% ] 0033/0200 VUs  0m01.9s/4m0s  30.00 iters/s
+observer   [   1% ] 1 VUs          0m01.9s/4m0s 
+
+running (0m03.0s), 0034/0201 VUs, 57 complete and 0 interrupted iterations
+buyers     [   1% ] 0033/0200 VUs  0m02.9s/4m0s  30.00 iters/s
+observer   [   1% ] 1 VUs          0m02.9s/4m0s 
+
+running (0m04.0s), 0033/0201 VUs, 89 complete and 0 interrupted iterations
+buyers     [   2% ] 0032/0200 VUs  0m03.9s/4m0s  30.00 iters/s
+observer   [   2% ] 1 VUs          0m03.9s/4m0s 
+
+running (0m05.0s), 0033/0201 VUs, 120 complete and 0 interrupted iterations
+buyers     [   2% ] 0032/0200 VUs  0m04.9s/4m0s  30.00 iters/s
+observer   [   2% ] 1 VUs          0m04.9s/4m0s 
+
+running (0m06.0s), 0034/0201 VUs, 150 complete and 0 interrupted iterations
+buyers     [   2% ] 0033/0200 VUs  0m05.9s/4m0s  30.00 iters/s
+observer   [   2% ] 1 VUs          0m05.9s/4m0s 
+
+running (0m07.0s), 0034/0201 VUs, 181 complete and 0 interrupted iterations
+buyers     [   3% ] 0033/0200 VUs  0m06.9s/4m0s  30.00 iters/s
+observer   [   3% ] 1 VUs          0m06.9s/4m0s 
+
+running (0m08.0s), 0034/0201 VUs, 212 complete and 0 interrupted iterations
+buyers     [   3% ] 0033/0200 VUs  0m07.9s/4m0s  30.00 iters/s
+observer   [   3% ] 1 VUs          0m07.9s/4m0s 
+
+running (0m09.0s), 0033/0201 VUs, 244 complete and 0 interrupted iterations
+buyers     [   4% ] 0032/0200 VUs  0m08.9s/4m0s  30.00 iters/s
+observer   [   4% ] 1 VUs          0m08.9s/4m0s 
+
+running (0m10.0s), 0034/0201 VUs, 274 complete and 0 interrupted iterations
+buyers     [   4% ] 0033/0200 VUs  0m09.9s/4m0s  30.00 iters/s
+observer   [   4% ] 1 VUs          0m09.9s/4m0s 
+
+running (0m11.0s), 0033/0201 VUs, 306 complete and 0 interrupted iterations
+buyers     [   5% ] 0032/0200 VUs  0m10.9s/4m0s  30.00 iters/s
+observer   [   5% ] 1 VUs          0m10.9s/4m0s 
+
+running (0m12.0s), 0033/0201 VUs, 337 complete and 0 interrupted iterations
+buyers     [   5% ] 0032/0200 VUs  0m11.9s/4m0s  30.00 iters/s
+observer   [   5% ] 1 VUs          0m11.9s/4m0s 
+
+running (0m13.0s), 0033/0201 VUs, 368 complete and 0 interrupted iterations
+buyers     [   5% ] 0032/0200 VUs  0m12.9s/4m0s  30.00 iters/s
+observer   [   5% ] 1 VUs          0m12.9s/4m0s 
+
+running (0m14.0s), 0033/0201 VUs, 399 complete and 0 interrupted iterations
+buyers     [   6% ] 0032/0200 VUs  0m13.9s/4m0s  30.00 iters/s
+observer   [   6% ] 1 VUs          0m13.9s/4m0s 
+
+running (0m15.0s), 0033/0201 VUs, 430 complete and 0 interrupted iterations
+buyers     [   6% ] 0032/0200 VUs  0m14.9s/4m0s  30.00 iters/s
+observer   [   6% ] 1 VUs          0m14.9s/4m0s 
+
+running (0m16.0s), 0034/0201 VUs, 460 complete and 0 interrupted iterations
+buyers     [   7% ] 0033/0200 VUs  0m15.9s/4m0s  30.00 iters/s
+observer   [   7% ] 1 VUs          0m15.9s/4m0s 
+
+running (0m17.0s), 0034/0201 VUs, 491 complete and 0 interrupted iterations
+buyers     [   7% ] 0033/0200 VUs  0m16.9s/4m0s  30.00 iters/s
+observer   [   7% ] 1 VUs          0m16.9s/4m0s 
+
+running (0m18.0s), 0033/0201 VUs, 523 complete and 0 interrupted iterations
+buyers     [   7% ] 0032/0200 VUs  0m17.9s/4m0s  30.00 iters/s
+observer   [   7% ] 1 VUs          0m17.9s/4m0s 
+
+running (0m19.0s), 0035/0201 VUs, 552 complete and 0 interrupted iterations
+buyers     [   8% ] 0034/0200 VUs  0m18.9s/4m0s  30.00 iters/s
+observer   [   8% ] 1 VUs          0m18.9s/4m0s 
+
+running (0m20.0s), 0035/0201 VUs, 583 complete and 0 interrupted iterations
+buyers     [   8% ] 0034/0200 VUs  0m19.9s/4m0s  30.00 iters/s
+observer   [   8% ] 1 VUs          0m19.9s/4m0s 
+
+running (0m21.0s), 0034/0201 VUs, 615 complete and 0 interrupted iterations
+buyers     [   9% ] 0033/0200 VUs  0m20.9s/4m0s  30.00 iters/s
+observer   [   9% ] 1 VUs          0m20.9s/4m0s 
+
+running (0m22.0s), 0034/0201 VUs, 646 complete and 0 interrupted iterations
+buyers     [   9% ] 0033/0200 VUs  0m21.9s/4m0s  30.00 iters/s
+observer   [   9% ] 1 VUs          0m21.9s/4m0s 
+
+running (0m23.0s), 0034/0201 VUs, 677 complete and 0 interrupted iterations
+buyers     [  10% ] 0033/0200 VUs  0m22.9s/4m0s  30.00 iters/s
+observer   [  10% ] 1 VUs          0m22.9s/4m0s 
+
+running (0m24.0s), 0034/0201 VUs, 708 complete and 0 interrupted iterations
+buyers     [  10% ] 0033/0200 VUs  0m23.9s/4m0s  30.00 iters/s
+observer   [  10% ] 1 VUs          0m23.9s/4m0s 
+
+running (0m25.0s), 0034/0201 VUs, 739 complete and 0 interrupted iterations
+buyers     [  10% ] 0033/0200 VUs  0m24.9s/4m0s  30.00 iters/s
+observer   [  10% ] 1 VUs          0m24.9s/4m0s 
+
+running (0m26.0s), 0034/0201 VUs, 770 complete and 0 interrupted iterations
+buyers     [  11% ] 0033/0200 VUs  0m25.9s/4m0s  30.00 iters/s
+observer   [  11% ] 1 VUs          0m25.9s/4m0s 
+
+running (0m27.0s), 0034/0201 VUs, 801 complete and 0 interrupted iterations
+buyers     [  11% ] 0033/0200 VUs  0m26.9s/4m0s  30.00 iters/s
+observer   [  11% ] 1 VUs          0m26.9s/4m0s 
+
+running (0m28.0s), 0035/0201 VUs, 831 complete and 0 interrupted iterations
+buyers     [  12% ] 0034/0200 VUs  0m27.9s/4m0s  30.00 iters/s
+observer   [  12% ] 1 VUs          0m27.9s/4m0s 
+
+running (0m29.0s), 0034/0201 VUs, 863 complete and 0 interrupted iterations
+buyers     [  12% ] 0033/0200 VUs  0m28.9s/4m0s  30.00 iters/s
+observer   [  12% ] 1 VUs          0m28.9s/4m0s 
+
+running (0m30.0s), 0034/0201 VUs, 894 complete and 0 interrupted iterations
+buyers     [  12% ] 0033/0200 VUs  0m29.9s/4m0s  30.00 iters/s
+observer   [  12% ] 1 VUs          0m29.9s/4m0s 
+
+running (0m31.0s), 0034/0201 VUs, 925 complete and 0 interrupted iterations
+buyers     [  13% ] 0033/0200 VUs  0m30.9s/4m0s  30.00 iters/s
+observer   [  13% ] 1 VUs          0m30.9s/4m0s 
+
+running (0m32.0s), 0033/0201 VUs, 957 complete and 0 interrupted iterations
+buyers     [  13% ] 0032/0200 VUs  0m31.9s/4m0s  30.00 iters/s
+observer   [  13% ] 1 VUs          0m31.9s/4m0s 
+
+running (0m33.0s), 0034/0201 VUs, 987 complete and 0 interrupted iterations
+buyers     [  14% ] 0033/0200 VUs  0m32.9s/4m0s  30.00 iters/s
+observer   [  14% ] 1 VUs          0m32.9s/4m0s 
+
+running (0m34.0s), 0033/0201 VUs, 1019 complete and 0 interrupted iterations
+buyers     [  14% ] 0032/0200 VUs  0m33.9s/4m0s  30.00 iters/s
+observer   [  14% ] 1 VUs          0m33.9s/4m0s 
+
+running (0m35.0s), 0034/0201 VUs, 1049 complete and 0 interrupted iterations
+buyers     [  15% ] 0033/0200 VUs  0m34.9s/4m0s  30.00 iters/s
+observer   [  15% ] 1 VUs          0m34.9s/4m0s 
+
+running (0m36.0s), 0033/0201 VUs, 1081 complete and 0 interrupted iterations
+buyers     [  15% ] 0032/0200 VUs  0m35.9s/4m0s  30.00 iters/s
+observer   [  15% ] 1 VUs          0m35.9s/4m0s 
+
+running (0m37.0s), 0032/0201 VUs, 1113 complete and 0 interrupted iterations
+buyers     [  15% ] 0031/0200 VUs  0m36.9s/4m0s  30.00 iters/s
+observer   [  15% ] 1 VUs          0m36.9s/4m0s 
+
+running (0m38.0s), 0035/0201 VUs, 1141 complete and 0 interrupted iterations
+buyers     [  16% ] 0034/0200 VUs  0m37.9s/4m0s  30.00 iters/s
+observer   [  16% ] 1 VUs          0m37.9s/4m0s 
+
+running (0m39.0s), 0034/0201 VUs, 1173 complete and 0 interrupted iterations
+buyers     [  16% ] 0033/0200 VUs  0m38.9s/4m0s  30.00 iters/s
+observer   [  16% ] 1 VUs          0m38.9s/4m0s 
+
+running (0m40.0s), 0034/0201 VUs, 1204 complete and 0 interrupted iterations
+buyers     [  17% ] 0033/0200 VUs  0m39.9s/4m0s  30.00 iters/s
+observer   [  17% ] 1 VUs          0m39.9s/4m0s 
+
+running (0m41.0s), 0033/0201 VUs, 1236 complete and 0 interrupted iterations
+buyers     [  17% ] 0032/0200 VUs  0m40.9s/4m0s  30.00 iters/s
+observer   [  17% ] 1 VUs          0m40.9s/4m0s 
+
+running (0m42.0s), 0034/0201 VUs, 1266 complete and 0 interrupted iterations
+buyers     [  17% ] 0033/0200 VUs  0m41.9s/4m0s  30.00 iters/s
+observer   [  17% ] 1 VUs          0m41.9s/4m0s 
+
+running (0m43.0s), 0033/0201 VUs, 1298 complete and 0 interrupted iterations
+buyers     [  18% ] 0032/0200 VUs  0m42.9s/4m0s  30.00 iters/s
+observer   [  18% ] 1 VUs          0m42.9s/4m0s 
+
+running (0m44.0s), 0035/0201 VUs, 1327 complete and 0 interrupted iterations
+buyers     [  18% ] 0034/0200 VUs  0m43.9s/4m0s  30.00 iters/s
+observer   [  18% ] 1 VUs          0m43.9s/4m0s 
+
+running (0m45.0s), 0033/0201 VUs, 1360 complete and 0 interrupted iterations
+buyers     [  19% ] 0032/0200 VUs  0m44.9s/4m0s  30.00 iters/s
+observer   [  19% ] 1 VUs          0m44.9s/4m0s 
+
+running (0m46.0s), 0031/0201 VUs, 1393 complete and 0 interrupted iterations
+buyers     [  19% ] 0030/0200 VUs  0m45.9s/4m0s  30.00 iters/s
+observer   [  19% ] 1 VUs          0m45.9s/4m0s 
+time="2026-10-12T14:17:42+09:00" level=info msg="[2_pg_5xx t=46s] circuit confirm=OPEN query=CLOSED" source=console
+
+running (0m47.0s), 0031/0201 VUs, 1424 complete and 0 interrupted iterations
+buyers     [  20% ] 0030/0200 VUs  0m46.9s/4m0s  30.00 iters/s
+observer   [  20% ] 1 VUs          0m46.9s/4m0s 
+
+running (0m48.0s), 0031/0201 VUs, 1455 complete and 0 interrupted iterations
+buyers     [  20% ] 0030/0200 VUs  0m47.9s/4m0s  30.00 iters/s
+observer   [  20% ] 1 VUs          0m47.9s/4m0s 
+
+running (0m49.0s), 0031/0201 VUs, 1486 complete and 0 interrupted iterations
+buyers     [  20% ] 0030/0200 VUs  0m48.9s/4m0s  30.00 iters/s
+observer   [  20% ] 1 VUs          0m48.9s/4m0s 
+
+running (0m50.0s), 0031/0201 VUs, 1517 complete and 0 interrupted iterations
+buyers     [  21% ] 0030/0200 VUs  0m49.9s/4m0s  30.00 iters/s
+observer   [  21% ] 1 VUs          0m49.9s/4m0s 
+
+running (0m51.0s), 0031/0201 VUs, 1548 complete and 0 interrupted iterations
+buyers     [  21% ] 0030/0200 VUs  0m50.9s/4m0s  30.00 iters/s
+observer   [  21% ] 1 VUs          0m50.9s/4m0s 
+
+running (0m52.0s), 0031/0201 VUs, 1579 complete and 0 interrupted iterations
+buyers     [  22% ] 0030/0200 VUs  0m51.9s/4m0s  30.00 iters/s
+observer   [  22% ] 1 VUs          0m51.9s/4m0s 
+
+running (0m53.0s), 0031/0201 VUs, 1610 complete and 0 interrupted iterations
+buyers     [  22% ] 0030/0200 VUs  0m52.9s/4m0s  30.00 iters/s
+observer   [  22% ] 1 VUs          0m52.9s/4m0s 
+
+running (0m54.0s), 0031/0201 VUs, 1641 complete and 0 interrupted iterations
+buyers     [  22% ] 0030/0200 VUs  0m53.9s/4m0s  30.00 iters/s
+observer   [  22% ] 1 VUs          0m53.9s/4m0s 
+
+running (0m55.0s), 0031/0201 VUs, 1672 complete and 0 interrupted iterations
+buyers     [  23% ] 0030/0200 VUs  0m54.9s/4m0s  30.00 iters/s
+observer   [  23% ] 1 VUs          0m54.9s/4m0s 
+
+running (0m56.0s), 0031/0201 VUs, 1703 complete and 0 interrupted iterations
+buyers     [  23% ] 0030/0200 VUs  0m55.9s/4m0s  30.00 iters/s
+observer   [  23% ] 1 VUs          0m55.9s/4m0s 
+
+running (0m57.0s), 0031/0201 VUs, 1734 complete and 0 interrupted iterations
+buyers     [  24% ] 0030/0200 VUs  0m56.9s/4m0s  30.00 iters/s
+observer   [  24% ] 1 VUs          0m56.9s/4m0s 
+
+running (0m58.0s), 0031/0201 VUs, 1765 complete and 0 interrupted iterations
+buyers     [  24% ] 0030/0200 VUs  0m57.9s/4m0s  30.00 iters/s
+observer   [  24% ] 1 VUs          0m57.9s/4m0s 
+
+running (0m59.0s), 0031/0201 VUs, 1796 complete and 0 interrupted iterations
+buyers     [  25% ] 0030/0200 VUs  0m58.9s/4m0s  30.00 iters/s
+observer   [  25% ] 1 VUs          0m58.9s/4m0s 
+
+running (1m00.0s), 0032/0201 VUs, 1826 complete and 0 interrupted iterations
+buyers     [  25% ] 0031/0200 VUs  0m59.9s/4m0s  30.00 iters/s
+observer   [  25% ] 1 VUs          0m59.9s/4m0s 
+
+running (1m01.0s), 0032/0201 VUs, 1857 complete and 0 interrupted iterations
+buyers     [  25% ] 0031/0200 VUs  1m00.9s/4m0s  30.00 iters/s
+observer   [  25% ] 1 VUs          1m00.9s/4m0s 
+
+running (1m02.0s), 0031/0201 VUs, 1889 complete and 0 interrupted iterations
+buyers     [  26% ] 0030/0200 VUs  1m01.9s/4m0s  30.00 iters/s
+observer   [  26% ] 1 VUs          1m01.9s/4m0s 
+
+running (1m03.0s), 0032/0201 VUs, 1919 complete and 0 interrupted iterations
+buyers     [  26% ] 0031/0200 VUs  1m02.9s/4m0s  30.00 iters/s
+observer   [  26% ] 1 VUs          1m02.9s/4m0s 
+
+running (1m04.0s), 0031/0201 VUs, 1951 complete and 0 interrupted iterations
+buyers     [  27% ] 0030/0200 VUs  1m03.9s/4m0s  30.00 iters/s
+observer   [  27% ] 1 VUs          1m03.9s/4m0s 
+
+running (1m05.0s), 0031/0201 VUs, 1982 complete and 0 interrupted iterations
+buyers     [  27% ] 0030/0200 VUs  1m04.9s/4m0s  30.00 iters/s
+observer   [  27% ] 1 VUs          1m04.9s/4m0s 
+
+running (1m06.0s), 0031/0201 VUs, 2013 complete and 0 interrupted iterations
+buyers     [  27% ] 0030/0200 VUs  1m05.9s/4m0s  30.00 iters/s
+observer   [  27% ] 1 VUs          1m05.9s/4m0s 
+time="2026-10-12T14:18:02+09:00" level=info msg="[2_pg_5xx t=66s] circuit confirm=OPEN query=OPEN" source=console
+
+running (1m07.0s), 0031/0201 VUs, 2044 complete and 0 interrupted iterations
+buyers     [  28% ] 0030/0200 VUs  1m06.9s/4m0s  30.00 iters/s
+observer   [  28% ] 1 VUs          1m06.9s/4m0s 
+
+running (1m08.0s), 0031/0201 VUs, 2075 complete and 0 interrupted iterations
+buyers     [  28% ] 0030/0200 VUs  1m07.9s/4m0s  30.00 iters/s
+observer   [  28% ] 1 VUs          1m07.9s/4m0s 
+
+running (1m09.0s), 0031/0201 VUs, 2106 complete and 0 interrupted iterations
+buyers     [  29% ] 0030/0200 VUs  1m08.9s/4m0s  30.00 iters/s
+observer   [  29% ] 1 VUs          1m08.9s/4m0s 
+
+running (1m10.0s), 0031/0201 VUs, 2137 complete and 0 interrupted iterations
+buyers     [  29% ] 0030/0200 VUs  1m09.9s/4m0s  30.00 iters/s
+observer   [  29% ] 1 VUs          1m09.9s/4m0s 
+
+running (1m11.0s), 0031/0201 VUs, 2168 complete and 0 interrupted iterations
+buyers     [  30% ] 0030/0200 VUs  1m10.9s/4m0s  30.00 iters/s
+observer   [  30% ] 1 VUs          1m10.9s/4m0s 
+
+running (1m12.0s), 0031/0201 VUs, 2199 complete and 0 interrupted iterations
+buyers     [  30% ] 0030/0200 VUs  1m11.9s/4m0s  30.00 iters/s
+observer   [  30% ] 1 VUs          1m11.9s/4m0s 
+
+running (1m13.0s), 0031/0201 VUs, 2230 complete and 0 interrupted iterations
+buyers     [  30% ] 0030/0200 VUs  1m12.9s/4m0s  30.00 iters/s
+observer   [  30% ] 1 VUs          1m12.9s/4m0s 
+
+running (1m14.0s), 0032/0201 VUs, 2260 complete and 0 interrupted iterations
+buyers     [  31% ] 0031/0200 VUs  1m13.9s/4m0s  30.00 iters/s
+observer   [  31% ] 1 VUs          1m13.9s/4m0s 
+
+running (1m15.0s), 0032/0201 VUs, 2291 complete and 0 interrupted iterations
+buyers     [  31% ] 0031/0200 VUs  1m14.9s/4m0s  30.00 iters/s
+observer   [  31% ] 1 VUs          1m14.9s/4m0s 
+
+running (1m16.0s), 0031/0201 VUs, 2323 complete and 0 interrupted iterations
+buyers     [  32% ] 0030/0200 VUs  1m15.9s/4m0s  30.00 iters/s
+observer   [  32% ] 1 VUs          1m15.9s/4m0s 
+time="2026-10-12T14:18:12+09:00" level=info msg="[2_pg_5xx t=76s] circuit confirm=OPEN query=HALF_OPEN" source=console
+
+running (1m17.0s), 0031/0201 VUs, 2354 complete and 0 interrupted iterations
+buyers     [  32% ] 0030/0200 VUs  1m16.9s/4m0s  30.00 iters/s
+observer   [  32% ] 1 VUs          1m16.9s/4m0s 
+time="2026-10-12T14:18:13+09:00" level=info msg="[2_pg_5xx t=77s] circuit confirm=OPEN query=OPEN" source=console
+
+running (1m18.0s), 0031/0201 VUs, 2385 complete and 0 interrupted iterations
+buyers     [  32% ] 0030/0200 VUs  1m17.9s/4m0s  30.00 iters/s
+observer   [  32% ] 1 VUs          1m17.9s/4m0s 
+
+running (1m19.0s), 0031/0201 VUs, 2416 complete and 0 interrupted iterations
+buyers     [  33% ] 0030/0200 VUs  1m18.9s/4m0s  30.00 iters/s
+observer   [  33% ] 1 VUs          1m18.9s/4m0s 
+
+running (1m20.0s), 0031/0201 VUs, 2447 complete and 0 interrupted iterations
+buyers     [  33% ] 0030/0200 VUs  1m19.9s/4m0s  30.00 iters/s
+observer   [  33% ] 1 VUs          1m19.9s/4m0s 
+
+running (1m21.0s), 0031/0201 VUs, 2478 complete and 0 interrupted iterations
+buyers     [  34% ] 0030/0200 VUs  1m20.9s/4m0s  30.00 iters/s
+observer   [  34% ] 1 VUs          1m20.9s/4m0s 
+
+running (1m22.0s), 0031/0201 VUs, 2509 complete and 0 interrupted iterations
+buyers     [  34% ] 0030/0200 VUs  1m21.9s/4m0s  30.00 iters/s
+observer   [  34% ] 1 VUs          1m21.9s/4m0s 
+
+running (1m23.0s), 0031/0201 VUs, 2540 complete and 0 interrupted iterations
+buyers     [  35% ] 0030/0200 VUs  1m22.9s/4m0s  30.00 iters/s
+observer   [  35% ] 1 VUs          1m22.9s/4m0s 
+
+running (1m24.0s), 0031/0201 VUs, 2571 complete and 0 interrupted iterations
+buyers     [  35% ] 0030/0200 VUs  1m23.9s/4m0s  30.00 iters/s
+observer   [  35% ] 1 VUs          1m23.9s/4m0s 
+
+running (1m25.0s), 0031/0201 VUs, 2602 complete and 0 interrupted iterations
+buyers     [  35% ] 0030/0200 VUs  1m24.9s/4m0s  30.00 iters/s
+observer   [  35% ] 1 VUs          1m24.9s/4m0s 
+
+running (1m26.0s), 0031/0201 VUs, 2633 complete and 0 interrupted iterations
+buyers     [  36% ] 0030/0200 VUs  1m25.9s/4m0s  30.00 iters/s
+observer   [  36% ] 1 VUs          1m25.9s/4m0s 
+
+running (1m27.0s), 0031/0201 VUs, 2664 complete and 0 interrupted iterations
+buyers     [  36% ] 0030/0200 VUs  1m26.9s/4m0s  30.00 iters/s
+observer   [  36% ] 1 VUs          1m26.9s/4m0s 
+time="2026-10-12T14:18:23+09:00" level=info msg="[2_pg_5xx t=87s] circuit confirm=OPEN query=HALF_OPEN" source=console
+
+running (1m28.0s), 0031/0201 VUs, 2695 complete and 0 interrupted iterations
+buyers     [  37% ] 0030/0200 VUs  1m27.9s/4m0s  30.00 iters/s
+observer   [  37% ] 1 VUs          1m27.9s/4m0s 
+time="2026-10-12T14:18:24+09:00" level=info msg="[2_pg_5xx t=88s] circuit confirm=OPEN query=OPEN" source=console
+
+running (1m29.0s), 0031/0201 VUs, 2726 complete and 0 interrupted iterations
+buyers     [  37% ] 0030/0200 VUs  1m28.9s/4m0s  30.00 iters/s
+observer   [  37% ] 1 VUs          1m28.9s/4m0s 
+
+running (1m30.0s), 0031/0201 VUs, 2757 complete and 0 interrupted iterations
+buyers     [  37% ] 0030/0200 VUs  1m29.9s/4m0s  30.00 iters/s
+observer   [  37% ] 1 VUs          1m29.9s/4m0s 
+
+running (1m31.0s), 0031/0201 VUs, 2788 complete and 0 interrupted iterations
+buyers     [  38% ] 0030/0200 VUs  1m30.9s/4m0s  30.00 iters/s
+observer   [  38% ] 1 VUs          1m30.9s/4m0s 
+
+running (1m32.0s), 0031/0201 VUs, 2819 complete and 0 interrupted iterations
+buyers     [  38% ] 0030/0200 VUs  1m31.9s/4m0s  30.00 iters/s
+observer   [  38% ] 1 VUs          1m31.9s/4m0s 
+
+running (1m33.0s), 0031/0201 VUs, 2850 complete and 0 interrupted iterations
+buyers     [  39% ] 0030/0200 VUs  1m32.9s/4m0s  30.00 iters/s
+observer   [  39% ] 1 VUs          1m32.9s/4m0s 
+
+running (1m34.0s), 0031/0201 VUs, 2881 complete and 0 interrupted iterations
+buyers     [  39% ] 0030/0200 VUs  1m33.9s/4m0s  30.00 iters/s
+observer   [  39% ] 1 VUs          1m33.9s/4m0s 
+
+running (1m35.0s), 0031/0201 VUs, 2912 complete and 0 interrupted iterations
+buyers     [  40% ] 0030/0200 VUs  1m34.9s/4m0s  30.00 iters/s
+observer   [  40% ] 1 VUs          1m34.9s/4m0s 
+
+running (1m36.0s), 0031/0201 VUs, 2943 complete and 0 interrupted iterations
+buyers     [  40% ] 0030/0200 VUs  1m35.9s/4m0s  30.00 iters/s
+observer   [  40% ] 1 VUs          1m35.9s/4m0s 
+time="2026-10-12T14:18:32+09:00" level=info msg="[3_recover t=96s] circuit confirm=CLOSED query=OPEN" source=console
+
+running (1m37.0s), 0033/0201 VUs, 2972 complete and 0 interrupted iterations
+buyers     [  40% ] 0032/0200 VUs  1m36.9s/4m0s  30.00 iters/s
+observer   [  40% ] 1 VUs          1m36.9s/4m0s 
+
+running (1m38.0s), 0033/0201 VUs, 3003 complete and 0 interrupted iterations
+buyers     [  41% ] 0032/0200 VUs  1m37.9s/4m0s  30.00 iters/s
+observer   [  41% ] 1 VUs          1m37.9s/4m0s 
+time="2026-10-12T14:18:34+09:00" level=info msg="[3_recover t=98s] circuit confirm=CLOSED query=CLOSED" source=console
+
+running (1m39.0s), 0033/0201 VUs, 3034 complete and 0 interrupted iterations
+buyers     [  41% ] 0032/0200 VUs  1m38.9s/4m0s  30.00 iters/s
+observer   [  41% ] 1 VUs          1m38.9s/4m0s 
+
+running (1m40.0s), 0033/0201 VUs, 3065 complete and 0 interrupted iterations
+buyers     [  42% ] 0032/0200 VUs  1m39.9s/4m0s  30.00 iters/s
+observer   [  42% ] 1 VUs          1m39.9s/4m0s 
+
+running (1m41.0s), 0034/0201 VUs, 3095 complete and 0 interrupted iterations
+buyers     [  42% ] 0033/0200 VUs  1m40.9s/4m0s  30.00 iters/s
+observer   [  42% ] 1 VUs          1m40.9s/4m0s 
+
+running (1m42.0s), 0034/0201 VUs, 3126 complete and 0 interrupted iterations
+buyers     [  42% ] 0033/0200 VUs  1m41.9s/4m0s  30.00 iters/s
+observer   [  42% ] 1 VUs          1m41.9s/4m0s 
+
+running (1m43.0s), 0033/0201 VUs, 3158 complete and 0 interrupted iterations
+buyers     [  43% ] 0032/0200 VUs  1m42.9s/4m0s  30.00 iters/s
+observer   [  43% ] 1 VUs          1m42.9s/4m0s 
+
+running (1m44.0s), 0035/0201 VUs, 3187 complete and 0 interrupted iterations
+buyers     [  43% ] 0034/0200 VUs  1m43.9s/4m0s  30.00 iters/s
+observer   [  43% ] 1 VUs          1m43.9s/4m0s 
+
+running (1m45.0s), 0033/0201 VUs, 3220 complete and 0 interrupted iterations
+buyers     [  44% ] 0032/0200 VUs  1m44.9s/4m0s  30.00 iters/s
+observer   [  44% ] 1 VUs          1m44.9s/4m0s 
+
+running (1m46.0s), 0035/0201 VUs, 3249 complete and 0 interrupted iterations
+buyers     [  44% ] 0034/0200 VUs  1m45.9s/4m0s  30.00 iters/s
+observer   [  44% ] 1 VUs          1m45.9s/4m0s 
+
+running (1m47.0s), 0033/0201 VUs, 3282 complete and 0 interrupted iterations
+buyers     [  45% ] 0032/0200 VUs  1m46.9s/4m0s  30.00 iters/s
+observer   [  45% ] 1 VUs          1m46.9s/4m0s 
+
+running (1m48.0s), 0034/0201 VUs, 3312 complete and 0 interrupted iterations
+buyers     [  45% ] 0033/0200 VUs  1m47.9s/4m0s  30.00 iters/s
+observer   [  45% ] 1 VUs          1m47.9s/4m0s 
+
+running (1m49.0s), 0034/0201 VUs, 3343 complete and 0 interrupted iterations
+buyers     [  45% ] 0033/0200 VUs  1m48.9s/4m0s  30.00 iters/s
+observer   [  45% ] 1 VUs          1m48.9s/4m0s 
+
+running (1m50.0s), 0033/0201 VUs, 3375 complete and 0 interrupted iterations
+buyers     [  46% ] 0032/0200 VUs  1m49.9s/4m0s  30.00 iters/s
+observer   [  46% ] 1 VUs          1m49.9s/4m0s 
+
+running (1m51.0s), 0034/0201 VUs, 3405 complete and 0 interrupted iterations
+buyers     [  46% ] 0033/0200 VUs  1m50.9s/4m0s  30.00 iters/s
+observer   [  46% ] 1 VUs          1m50.9s/4m0s 
+
+running (1m52.0s), 0034/0201 VUs, 3436 complete and 0 interrupted iterations
+buyers     [  47% ] 0033/0200 VUs  1m51.9s/4m0s  30.00 iters/s
+observer   [  47% ] 1 VUs          1m51.9s/4m0s 
+
+running (1m53.0s), 0033/0201 VUs, 3468 complete and 0 interrupted iterations
+buyers     [  47% ] 0032/0200 VUs  1m52.9s/4m0s  30.00 iters/s
+observer   [  47% ] 1 VUs          1m52.9s/4m0s 
+
+running (1m54.0s), 0034/0201 VUs, 3498 complete and 0 interrupted iterations
+buyers     [  47% ] 0033/0200 VUs  1m53.9s/4m0s  30.00 iters/s
+observer   [  47% ] 1 VUs          1m53.9s/4m0s 
+
+running (1m55.0s), 0034/0201 VUs, 3529 complete and 0 interrupted iterations
+buyers     [  48% ] 0033/0200 VUs  1m54.9s/4m0s  30.00 iters/s
+observer   [  48% ] 1 VUs          1m54.9s/4m0s 
+
+running (1m56.0s), 0034/0201 VUs, 3560 complete and 0 interrupted iterations
+buyers     [  48% ] 0033/0200 VUs  1m55.9s/4m0s  30.00 iters/s
+observer   [  48% ] 1 VUs          1m55.9s/4m0s 
+
+running (1m57.0s), 0033/0201 VUs, 3592 complete and 0 interrupted iterations
+buyers     [  49% ] 0032/0200 VUs  1m56.9s/4m0s  30.00 iters/s
+observer   [  49% ] 1 VUs          1m56.9s/4m0s 
+
+running (1m58.0s), 0034/0201 VUs, 3622 complete and 0 interrupted iterations
+buyers     [  49% ] 0033/0200 VUs  1m57.9s/4m0s  30.00 iters/s
+observer   [  49% ] 1 VUs          1m57.9s/4m0s 
+
+running (1m59.0s), 0033/0201 VUs, 3654 complete and 0 interrupted iterations
+buyers     [  50% ] 0032/0200 VUs  1m58.9s/4m0s  30.00 iters/s
+observer   [  50% ] 1 VUs          1m58.9s/4m0s 
+
+running (2m00.0s), 0033/0201 VUs, 3685 complete and 0 interrupted iterations
+buyers     [  50% ] 0032/0200 VUs  1m59.9s/4m0s  30.00 iters/s
+observer   [  50% ] 1 VUs          1m59.9s/4m0s 
+
+running (2m01.0s), 0032/0201 VUs, 3717 complete and 0 interrupted iterations
+buyers     [  50% ] 0031/0200 VUs  2m00.9s/4m0s  30.00 iters/s
+observer   [  50% ] 1 VUs          2m00.9s/4m0s 
+
+running (2m02.0s), 0033/0201 VUs, 3747 complete and 0 interrupted iterations
+buyers     [  51% ] 0032/0200 VUs  2m01.9s/4m0s  30.00 iters/s
+observer   [  51% ] 1 VUs          2m01.9s/4m0s 
+
+running (2m03.0s), 0033/0201 VUs, 3778 complete and 0 interrupted iterations
+buyers     [  51% ] 0032/0200 VUs  2m02.9s/4m0s  30.00 iters/s
+observer   [  51% ] 1 VUs          2m02.9s/4m0s 
+
+running (2m04.0s), 0034/0201 VUs, 3808 complete and 0 interrupted iterations
+buyers     [  52% ] 0033/0200 VUs  2m03.9s/4m0s  30.00 iters/s
+observer   [  52% ] 1 VUs          2m03.9s/4m0s 
+
+running (2m05.0s), 0034/0201 VUs, 3839 complete and 0 interrupted iterations
+buyers     [  52% ] 0033/0200 VUs  2m04.9s/4m0s  30.00 iters/s
+observer   [  52% ] 1 VUs          2m04.9s/4m0s 
+
+running (2m06.0s), 0033/0201 VUs, 3871 complete and 0 interrupted iterations
+buyers     [  52% ] 0032/0200 VUs  2m05.9s/4m0s  30.00 iters/s
+observer   [  52% ] 1 VUs          2m05.9s/4m0s 
+
+running (2m07.0s), 0033/0201 VUs, 3902 complete and 0 interrupted iterations
+buyers     [  53% ] 0032/0200 VUs  2m06.9s/4m0s  30.00 iters/s
+observer   [  53% ] 1 VUs          2m06.9s/4m0s 
+
+running (2m08.0s), 0034/0201 VUs, 3932 complete and 0 interrupted iterations
+buyers     [  53% ] 0033/0200 VUs  2m07.9s/4m0s  30.00 iters/s
+observer   [  53% ] 1 VUs          2m07.9s/4m0s 
+
+running (2m09.0s), 0034/0201 VUs, 3963 complete and 0 interrupted iterations
+buyers     [  54% ] 0033/0200 VUs  2m08.9s/4m0s  30.00 iters/s
+observer   [  54% ] 1 VUs          2m08.9s/4m0s 
+
+running (2m10.0s), 0034/0201 VUs, 3994 complete and 0 interrupted iterations
+buyers     [  54% ] 0033/0200 VUs  2m09.9s/4m0s  30.00 iters/s
+observer   [  54% ] 1 VUs          2m09.9s/4m0s 
+
+running (2m11.0s), 0034/0201 VUs, 4025 complete and 0 interrupted iterations
+buyers     [  55% ] 0033/0200 VUs  2m10.9s/4m0s  30.00 iters/s
+observer   [  55% ] 1 VUs          2m10.9s/4m0s 
+
+running (2m12.0s), 0034/0201 VUs, 4056 complete and 0 interrupted iterations
+buyers     [  55% ] 0033/0200 VUs  2m11.9s/4m0s  30.00 iters/s
+observer   [  55% ] 1 VUs          2m11.9s/4m0s 
+
+running (2m13.0s), 0033/0201 VUs, 4088 complete and 0 interrupted iterations
+buyers     [  55% ] 0032/0200 VUs  2m12.9s/4m0s  30.00 iters/s
+observer   [  55% ] 1 VUs          2m12.9s/4m0s 
+
+running (2m14.0s), 0034/0201 VUs, 4118 complete and 0 interrupted iterations
+buyers     [  56% ] 0033/0200 VUs  2m13.9s/4m0s  30.00 iters/s
+observer   [  56% ] 1 VUs          2m13.9s/4m0s 
+
+running (2m15.0s), 0033/0201 VUs, 4150 complete and 0 interrupted iterations
+buyers     [  56% ] 0032/0200 VUs  2m14.9s/4m0s  30.00 iters/s
+observer   [  56% ] 1 VUs          2m14.9s/4m0s 
+
+running (2m16.0s), 0060/0201 VUs, 4154 complete and 0 interrupted iterations
+buyers     [  57% ] 0059/0200 VUs  2m15.9s/4m0s  30.00 iters/s
+observer   [  57% ] 1 VUs          2m15.9s/4m0s 
+
+running (2m17.0s), 0090/0201 VUs, 4155 complete and 0 interrupted iterations
+buyers     [  57% ] 0089/0200 VUs  2m16.9s/4m0s  30.00 iters/s
+observer   [  57% ] 1 VUs          2m16.9s/4m0s 
+
+running (2m18.0s), 0120/0201 VUs, 4156 complete and 0 interrupted iterations
+buyers     [  57% ] 0119/0200 VUs  2m17.9s/4m0s  30.00 iters/s
+observer   [  57% ] 1 VUs          2m17.9s/4m0s 
+
+running (2m19.0s), 0150/0201 VUs, 4157 complete and 0 interrupted iterations
+buyers     [  58% ] 0149/0200 VUs  2m18.9s/4m0s  30.00 iters/s
+observer   [  58% ] 1 VUs          2m18.9s/4m0s 
+
+running (2m20.0s), 0180/0201 VUs, 4158 complete and 0 interrupted iterations
+buyers     [  58% ] 0179/0200 VUs  2m19.9s/4m0s  30.00 iters/s
+observer   [  58% ] 1 VUs          2m19.9s/4m0s 
+
+running (2m21.0s), 0205/0206 VUs, 4159 complete and 0 interrupted iterations
+buyers     [  59% ] 0204/0205 VUs  2m20.9s/4m0s  30.00 iters/s
+observer   [  59% ] 1 VUs          2m20.9s/4m0s 
+
+running (2m22.0s), 0220/0221 VUs, 4160 complete and 0 interrupted iterations
+buyers     [  59% ] 0219/0220 VUs  2m21.9s/4m0s  30.00 iters/s
+observer   [  59% ] 1 VUs          2m21.9s/4m0s 
+
+running (2m23.0s), 0235/0236 VUs, 4161 complete and 0 interrupted iterations
+buyers     [  60% ] 0234/0235 VUs  2m22.9s/4m0s  30.00 iters/s
+observer   [  60% ] 1 VUs          2m22.9s/4m0s 
+
+running (2m24.0s), 0250/0251 VUs, 4162 complete and 0 interrupted iterations
+buyers     [  60% ] 0249/0250 VUs  2m23.9s/4m0s  30.00 iters/s
+observer   [  60% ] 1 VUs          2m23.9s/4m0s 
+
+running (2m25.0s), 0265/0266 VUs, 4163 complete and 0 interrupted iterations
+buyers     [  60% ] 0264/0265 VUs  2m24.9s/4m0s  30.00 iters/s
+observer   [  60% ] 1 VUs          2m24.9s/4m0s 
+
+running (2m26.0s), 0280/0281 VUs, 4164 complete and 0 interrupted iterations
+buyers     [  61% ] 0279/0280 VUs  2m25.9s/4m0s  30.00 iters/s
+observer   [  61% ] 1 VUs          2m25.9s/4m0s 
+
+running (2m27.0s), 0295/0296 VUs, 4165 complete and 0 interrupted iterations
+buyers     [  61% ] 0294/0295 VUs  2m26.9s/4m0s  30.00 iters/s
+observer   [  61% ] 1 VUs          2m26.9s/4m0s 
+
+running (2m28.0s), 0310/0311 VUs, 4166 complete and 0 interrupted iterations
+buyers     [  62% ] 0309/0310 VUs  2m27.9s/4m0s  30.00 iters/s
+observer   [  62% ] 1 VUs          2m27.9s/4m0s 
+
+running (2m29.0s), 0325/0326 VUs, 4167 complete and 0 interrupted iterations
+buyers     [  62% ] 0324/0325 VUs  2m28.9s/4m0s  30.00 iters/s
+observer   [  62% ] 1 VUs          2m28.9s/4m0s 
+
+running (2m30.0s), 0340/0341 VUs, 4168 complete and 0 interrupted iterations
+buyers     [  62% ] 0339/0340 VUs  2m29.9s/4m0s  30.00 iters/s
+observer   [  62% ] 1 VUs          2m29.9s/4m0s 
+
+running (2m31.0s), 0355/0356 VUs, 4169 complete and 0 interrupted iterations
+buyers     [  63% ] 0354/0355 VUs  2m30.9s/4m0s  30.00 iters/s
+observer   [  63% ] 1 VUs          2m30.9s/4m0s 
+
+running (2m32.0s), 0370/0371 VUs, 4170 complete and 0 interrupted iterations
+buyers     [  63% ] 0369/0370 VUs  2m31.9s/4m0s  30.00 iters/s
+observer   [  63% ] 1 VUs          2m31.9s/4m0s 
+
+running (2m33.0s), 0385/0386 VUs, 4171 complete and 0 interrupted iterations
+buyers     [  64% ] 0384/0385 VUs  2m32.9s/4m0s  30.00 iters/s
+observer   [  64% ] 1 VUs          2m32.9s/4m0s 
+
+running (2m34.0s), 0400/0401 VUs, 4172 complete and 0 interrupted iterations
+buyers     [  64% ] 0399/0400 VUs  2m33.9s/4m0s  30.00 iters/s
+observer   [  64% ] 1 VUs          2m33.9s/4m0s 
+
+running (2m35.0s), 0415/0416 VUs, 4173 complete and 0 interrupted iterations
+buyers     [  65% ] 0414/0415 VUs  2m34.9s/4m0s  30.00 iters/s
+observer   [  65% ] 1 VUs          2m34.9s/4m0s 
+time="2026-10-12T14:19:32+09:00" level=info msg="[4_pg_hang t=156s] circuit confirm=OPEN query=CLOSED" source=console
+
+running (2m36.0s), 0407/0417 VUs, 4211 complete and 0 interrupted iterations
+buyers     [  65% ] 0406/0416 VUs  2m35.9s/4m0s  30.00 iters/s
+observer   [  65% ] 1 VUs          2m35.9s/4m0s 
+
+running (2m37.0s), 0389/0417 VUs, 4260 complete and 0 interrupted iterations
+buyers     [  65% ] 0388/0416 VUs  2m36.9s/4m0s  30.00 iters/s
+observer   [  65% ] 1 VUs          2m36.9s/4m0s 
+
+running (2m38.0s), 0352/0417 VUs, 4328 complete and 0 interrupted iterations
+buyers     [  66% ] 0351/0416 VUs  2m37.9s/4m0s  30.00 iters/s
+observer   [  66% ] 1 VUs          2m37.9s/4m0s 
+
+running (2m39.0s), 0319/0417 VUs, 4392 complete and 0 interrupted iterations
+buyers     [  66% ] 0318/0416 VUs  2m38.9s/4m0s  30.00 iters/s
+observer   [  66% ] 1 VUs          2m38.9s/4m0s 
+
+running (2m40.0s), 0287/0417 VUs, 4455 complete and 0 interrupted iterations
+buyers     [  67% ] 0286/0416 VUs  2m39.9s/4m0s  30.00 iters/s
+observer   [  67% ] 1 VUs          2m39.9s/4m0s 
+
+running (2m41.0s), 0258/0417 VUs, 4515 complete and 0 interrupted iterations
+buyers     [  67% ] 0257/0416 VUs  2m40.9s/4m0s  30.00 iters/s
+observer   [  67% ] 1 VUs          2m40.9s/4m0s 
+
+running (2m42.0s), 0232/0417 VUs, 4572 complete and 0 interrupted iterations
+buyers     [  67% ] 0231/0416 VUs  2m41.9s/4m0s  30.00 iters/s
+observer   [  67% ] 1 VUs          2m41.9s/4m0s 
+
+running (2m43.0s), 0217/0417 VUs, 4618 complete and 0 interrupted iterations
+buyers     [  68% ] 0216/0416 VUs  2m42.9s/4m0s  30.00 iters/s
+observer   [  68% ] 1 VUs          2m42.9s/4m0s 
+
+running (2m44.0s), 0202/0417 VUs, 4664 complete and 0 interrupted iterations
+buyers     [  68% ] 0201/0416 VUs  2m43.9s/4m0s  30.00 iters/s
+observer   [  68% ] 1 VUs          2m43.9s/4m0s 
+
+running (2m45.0s), 0187/0417 VUs, 4710 complete and 0 interrupted iterations
+buyers     [  69% ] 0186/0416 VUs  2m44.9s/4m0s  30.00 iters/s
+observer   [  69% ] 1 VUs          2m44.9s/4m0s 
+
+running (2m46.0s), 0175/0417 VUs, 4753 complete and 0 interrupted iterations
+buyers     [  69% ] 0174/0416 VUs  2m45.9s/4m0s  30.00 iters/s
+observer   [  69% ] 1 VUs          2m45.9s/4m0s 
+
+running (2m47.0s), 0160/0417 VUs, 4799 complete and 0 interrupted iterations
+buyers     [  70% ] 0159/0416 VUs  2m46.9s/4m0s  30.00 iters/s
+observer   [  70% ] 1 VUs          2m46.9s/4m0s 
+
+running (2m48.0s), 0145/0417 VUs, 4845 complete and 0 interrupted iterations
+buyers     [  70% ] 0144/0416 VUs  2m47.9s/4m0s  30.00 iters/s
+observer   [  70% ] 1 VUs          2m47.9s/4m0s 
+
+running (2m49.0s), 0130/0417 VUs, 4891 complete and 0 interrupted iterations
+buyers     [  70% ] 0129/0416 VUs  2m48.9s/4m0s  30.00 iters/s
+observer   [  70% ] 1 VUs          2m48.9s/4m0s 
+
+running (2m50.0s), 0115/0417 VUs, 4937 complete and 0 interrupted iterations
+buyers     [  71% ] 0114/0416 VUs  2m49.9s/4m0s  30.00 iters/s
+observer   [  71% ] 1 VUs          2m49.9s/4m0s 
+
+running (2m51.0s), 0100/0417 VUs, 4983 complete and 0 interrupted iterations
+buyers     [  71% ] 0099/0416 VUs  2m50.9s/4m0s  30.00 iters/s
+observer   [  71% ] 1 VUs          2m50.9s/4m0s 
+
+running (2m52.0s), 0085/0417 VUs, 5029 complete and 0 interrupted iterations
+buyers     [  72% ] 0084/0416 VUs  2m51.9s/4m0s  30.00 iters/s
+observer   [  72% ] 1 VUs          2m51.9s/4m0s 
+
+running (2m53.0s), 0070/0417 VUs, 5075 complete and 0 interrupted iterations
+buyers     [  72% ] 0069/0416 VUs  2m52.9s/4m0s  30.00 iters/s
+observer   [  72% ] 1 VUs          2m52.9s/4m0s 
+
+running (2m54.0s), 0055/0417 VUs, 5121 complete and 0 interrupted iterations
+buyers     [  72% ] 0054/0416 VUs  2m53.9s/4m0s  30.00 iters/s
+observer   [  72% ] 1 VUs          2m53.9s/4m0s 
+
+running (2m55.0s), 0040/0417 VUs, 5167 complete and 0 interrupted iterations
+buyers     [  73% ] 0039/0416 VUs  2m54.9s/4m0s  30.00 iters/s
+observer   [  73% ] 1 VUs          2m54.9s/4m0s 
+time="2026-10-12T14:19:52+09:00" level=info msg="[4_pg_hang t=176s] circuit confirm=HALF_OPEN query=CLOSED" source=console
+
+running (2m56.0s), 0037/0417 VUs, 5201 complete and 0 interrupted iterations
+buyers     [  73% ] 0036/0416 VUs  2m55.9s/4m0s  30.00 iters/s
+observer   [  73% ] 1 VUs          2m55.9s/4m0s 
+
+running (2m57.0s), 0037/0417 VUs, 5232 complete and 0 interrupted iterations
+buyers     [  74% ] 0036/0416 VUs  2m56.9s/4m0s  30.00 iters/s
+observer   [  74% ] 1 VUs          2m56.9s/4m0s 
+
+running (2m58.0s), 0037/0417 VUs, 5263 complete and 0 interrupted iterations
+buyers     [  74% ] 0036/0416 VUs  2m57.9s/4m0s  30.00 iters/s
+observer   [  74% ] 1 VUs          2m57.9s/4m0s 
+
+running (2m59.0s), 0037/0417 VUs, 5294 complete and 0 interrupted iterations
+buyers     [  75% ] 0036/0416 VUs  2m58.9s/4m0s  30.00 iters/s
+observer   [  75% ] 1 VUs          2m58.9s/4m0s 
+
+running (3m00.0s), 0037/0417 VUs, 5325 complete and 0 interrupted iterations
+buyers     [  75% ] 0036/0416 VUs  2m59.9s/4m0s  30.00 iters/s
+observer   [  75% ] 1 VUs          2m59.9s/4m0s 
+
+running (3m01.0s), 0037/0417 VUs, 5356 complete and 0 interrupted iterations
+buyers     [  75% ] 0036/0416 VUs  3m00.9s/4m0s  30.00 iters/s
+observer   [  75% ] 1 VUs          3m00.9s/4m0s 
+
+running (3m02.0s), 0037/0417 VUs, 5387 complete and 0 interrupted iterations
+buyers     [  76% ] 0036/0416 VUs  3m01.9s/4m0s  30.00 iters/s
+observer   [  76% ] 1 VUs          3m01.9s/4m0s 
+
+running (3m03.0s), 0037/0417 VUs, 5418 complete and 0 interrupted iterations
+buyers     [  76% ] 0036/0416 VUs  3m02.9s/4m0s  30.00 iters/s
+observer   [  76% ] 1 VUs          3m02.9s/4m0s 
+
+running (3m04.0s), 0037/0417 VUs, 5449 complete and 0 interrupted iterations
+buyers     [  77% ] 0036/0416 VUs  3m03.9s/4m0s  30.00 iters/s
+observer   [  77% ] 1 VUs          3m03.9s/4m0s 
+
+running (3m05.0s), 0037/0417 VUs, 5480 complete and 0 interrupted iterations
+buyers     [  77% ] 0036/0416 VUs  3m04.9s/4m0s  30.00 iters/s
+observer   [  77% ] 1 VUs          3m04.9s/4m0s 
+time="2026-10-12T14:20:02+09:00" level=info msg="[5_recover t=186s] circuit confirm=OPEN query=CLOSED" source=console
+
+running (3m06.0s), 0034/0417 VUs, 5514 complete and 0 interrupted iterations
+buyers     [  77% ] 0033/0416 VUs  3m05.9s/4m0s  30.00 iters/s
+observer   [  77% ] 1 VUs          3m05.9s/4m0s 
+
+running (3m07.0s), 0034/0417 VUs, 5545 complete and 0 interrupted iterations
+buyers     [  78% ] 0033/0416 VUs  3m06.9s/4m0s  30.00 iters/s
+observer   [  78% ] 1 VUs          3m06.9s/4m0s 
+
+running (3m08.0s), 0034/0417 VUs, 5576 complete and 0 interrupted iterations
+buyers     [  78% ] 0033/0416 VUs  3m07.9s/4m0s  30.00 iters/s
+observer   [  78% ] 1 VUs          3m07.9s/4m0s 
+
+running (3m09.0s), 0034/0417 VUs, 5607 complete and 0 interrupted iterations
+buyers     [  79% ] 0033/0416 VUs  3m08.9s/4m0s  30.00 iters/s
+observer   [  79% ] 1 VUs          3m08.9s/4m0s 
+
+running (3m10.0s), 0034/0417 VUs, 5638 complete and 0 interrupted iterations
+buyers     [  79% ] 0033/0416 VUs  3m09.9s/4m0s  30.00 iters/s
+observer   [  79% ] 1 VUs          3m09.9s/4m0s 
+
+running (3m11.0s), 0034/0417 VUs, 5669 complete and 0 interrupted iterations
+buyers     [  80% ] 0033/0416 VUs  3m10.9s/4m0s  30.00 iters/s
+observer   [  80% ] 1 VUs          3m10.9s/4m0s 
+
+running (3m12.0s), 0034/0417 VUs, 5700 complete and 0 interrupted iterations
+buyers     [  80% ] 0033/0416 VUs  3m11.9s/4m0s  30.00 iters/s
+observer   [  80% ] 1 VUs          3m11.9s/4m0s 
+
+running (3m13.0s), 0034/0417 VUs, 5731 complete and 0 interrupted iterations
+buyers     [  80% ] 0033/0416 VUs  3m12.9s/4m0s  30.00 iters/s
+observer   [  80% ] 1 VUs          3m12.9s/4m0s 
+
+running (3m14.0s), 0034/0417 VUs, 5762 complete and 0 interrupted iterations
+buyers     [  81% ] 0033/0416 VUs  3m13.9s/4m0s  30.00 iters/s
+observer   [  81% ] 1 VUs          3m13.9s/4m0s 
+
+running (3m15.0s), 0034/0417 VUs, 5793 complete and 0 interrupted iterations
+buyers     [  81% ] 0033/0416 VUs  3m14.9s/4m0s  30.00 iters/s
+observer   [  81% ] 1 VUs          3m14.9s/4m0s 
+time="2026-10-12T14:20:12+09:00" level=info msg="[5_recover t=196s] circuit confirm=CLOSED query=CLOSED" source=console
+
+running (3m16.0s), 0034/0417 VUs, 5824 complete and 0 interrupted iterations
+buyers     [  82% ] 0033/0416 VUs  3m15.9s/4m0s  30.00 iters/s
+observer   [  82% ] 1 VUs          3m15.9s/4m0s 
+
+running (3m17.0s), 0033/0417 VUs, 5856 complete and 0 interrupted iterations
+buyers     [  82% ] 0032/0416 VUs  3m16.9s/4m0s  30.00 iters/s
+observer   [  82% ] 1 VUs          3m16.9s/4m0s 
+
+running (3m18.0s), 0034/0417 VUs, 5886 complete and 0 interrupted iterations
+buyers     [  82% ] 0033/0416 VUs  3m17.9s/4m0s  30.00 iters/s
+observer   [  82% ] 1 VUs          3m17.9s/4m0s 
+
+running (3m19.0s), 0034/0417 VUs, 5917 complete and 0 interrupted iterations
+buyers     [  83% ] 0033/0416 VUs  3m18.9s/4m0s  30.00 iters/s
+observer   [  83% ] 1 VUs          3m18.9s/4m0s 
+
+running (3m20.0s), 0033/0417 VUs, 5949 complete and 0 interrupted iterations
+buyers     [  83% ] 0032/0416 VUs  3m19.9s/4m0s  30.00 iters/s
+observer   [  83% ] 1 VUs          3m19.9s/4m0s 
+
+running (3m21.0s), 0036/0417 VUs, 5977 complete and 0 interrupted iterations
+buyers     [  84% ] 0035/0416 VUs  3m20.9s/4m0s  30.00 iters/s
+observer   [  84% ] 1 VUs          3m20.9s/4m0s 
+
+running (3m22.0s), 0035/0417 VUs, 6008 complete and 0 interrupted iterations
+buyers     [  84% ] 0034/0416 VUs  3m21.9s/4m0s  30.00 iters/s
+observer   [  84% ] 1 VUs          3m21.9s/4m0s 
+
+running (3m23.0s), 0034/0417 VUs, 6040 complete and 0 interrupted iterations
+buyers     [  85% ] 0033/0416 VUs  3m22.9s/4m0s  30.00 iters/s
+observer   [  85% ] 1 VUs          3m22.9s/4m0s 
+
+running (3m24.0s), 0034/0417 VUs, 6071 complete and 0 interrupted iterations
+buyers     [  85% ] 0033/0416 VUs  3m23.9s/4m0s  30.00 iters/s
+observer   [  85% ] 1 VUs          3m23.9s/4m0s 
+
+running (3m25.0s), 0034/0417 VUs, 6102 complete and 0 interrupted iterations
+buyers     [  85% ] 0033/0416 VUs  3m24.9s/4m0s  30.00 iters/s
+observer   [  85% ] 1 VUs          3m24.9s/4m0s 
+
+running (3m26.0s), 0034/0417 VUs, 6133 complete and 0 interrupted iterations
+buyers     [  86% ] 0033/0416 VUs  3m25.9s/4m0s  30.00 iters/s
+observer   [  86% ] 1 VUs          3m25.9s/4m0s 
+
+running (3m27.0s), 0033/0417 VUs, 6165 complete and 0 interrupted iterations
+buyers     [  86% ] 0032/0416 VUs  3m26.9s/4m0s  30.00 iters/s
+observer   [  86% ] 1 VUs          3m26.9s/4m0s 
+
+running (3m28.0s), 0033/0417 VUs, 6196 complete and 0 interrupted iterations
+buyers     [  87% ] 0032/0416 VUs  3m27.9s/4m0s  30.00 iters/s
+observer   [  87% ] 1 VUs          3m27.9s/4m0s 
+
+running (3m29.0s), 0034/0417 VUs, 6226 complete and 0 interrupted iterations
+buyers     [  87% ] 0033/0416 VUs  3m28.9s/4m0s  30.00 iters/s
+observer   [  87% ] 1 VUs          3m28.9s/4m0s 
+
+running (3m30.0s), 0034/0417 VUs, 6257 complete and 0 interrupted iterations
+buyers     [  87% ] 0033/0416 VUs  3m29.9s/4m0s  30.00 iters/s
+observer   [  87% ] 1 VUs          3m29.9s/4m0s 
+
+running (3m31.0s), 0034/0417 VUs, 6288 complete and 0 interrupted iterations
+buyers     [  88% ] 0033/0416 VUs  3m30.9s/4m0s  30.00 iters/s
+observer   [  88% ] 1 VUs          3m30.9s/4m0s 
+
+running (3m32.0s), 0034/0417 VUs, 6319 complete and 0 interrupted iterations
+buyers     [  88% ] 0033/0416 VUs  3m31.9s/4m0s  30.00 iters/s
+observer   [  88% ] 1 VUs          3m31.9s/4m0s 
+
+running (3m33.0s), 0033/0417 VUs, 6351 complete and 0 interrupted iterations
+buyers     [  89% ] 0032/0416 VUs  3m32.9s/4m0s  30.00 iters/s
+observer   [  89% ] 1 VUs          3m32.9s/4m0s 
+
+running (3m34.0s), 0032/0417 VUs, 6383 complete and 0 interrupted iterations
+buyers     [  89% ] 0031/0416 VUs  3m33.9s/4m0s  30.00 iters/s
+observer   [  89% ] 1 VUs          3m33.9s/4m0s 
+
+running (3m35.0s), 0033/0417 VUs, 6413 complete and 0 interrupted iterations
+buyers     [  90% ] 0032/0416 VUs  3m34.9s/4m0s  30.00 iters/s
+observer   [  90% ] 1 VUs          3m34.9s/4m0s 
+
+running (3m36.0s), 0035/0417 VUs, 6442 complete and 0 interrupted iterations
+buyers     [  90% ] 0034/0416 VUs  3m35.9s/4m0s  30.00 iters/s
+observer   [  90% ] 1 VUs          3m35.9s/4m0s 
+
+running (3m37.0s), 0035/0417 VUs, 6473 complete and 0 interrupted iterations
+buyers     [  90% ] 0034/0416 VUs  3m36.9s/4m0s  30.00 iters/s
+observer   [  90% ] 1 VUs          3m36.9s/4m0s 
+
+running (3m38.0s), 0034/0417 VUs, 6505 complete and 0 interrupted iterations
+buyers     [  91% ] 0033/0416 VUs  3m37.9s/4m0s  30.00 iters/s
+observer   [  91% ] 1 VUs          3m37.9s/4m0s 
+
+running (3m39.0s), 0034/0417 VUs, 6536 complete and 0 interrupted iterations
+buyers     [  91% ] 0033/0416 VUs  3m38.9s/4m0s  30.00 iters/s
+observer   [  91% ] 1 VUs          3m38.9s/4m0s 
+
+running (3m40.0s), 0033/0417 VUs, 6568 complete and 0 interrupted iterations
+buyers     [  92% ] 0032/0416 VUs  3m39.9s/4m0s  30.00 iters/s
+observer   [  92% ] 1 VUs          3m39.9s/4m0s 
+
+running (3m41.0s), 0034/0417 VUs, 6598 complete and 0 interrupted iterations
+buyers     [  92% ] 0033/0416 VUs  3m40.9s/4m0s  30.00 iters/s
+observer   [  92% ] 1 VUs          3m40.9s/4m0s 
+
+running (3m42.0s), 0033/0417 VUs, 6630 complete and 0 interrupted iterations
+buyers     [  92% ] 0032/0416 VUs  3m41.9s/4m0s  30.00 iters/s
+observer   [  92% ] 1 VUs          3m41.9s/4m0s 
+
+running (3m43.0s), 0034/0417 VUs, 6660 complete and 0 interrupted iterations
+buyers     [  93% ] 0033/0416 VUs  3m42.9s/4m0s  30.00 iters/s
+observer   [  93% ] 1 VUs          3m42.9s/4m0s 
+
+running (3m44.0s), 0033/0417 VUs, 6692 complete and 0 interrupted iterations
+buyers     [  93% ] 0032/0416 VUs  3m43.9s/4m0s  30.00 iters/s
+observer   [  93% ] 1 VUs          3m43.9s/4m0s 
+
+running (3m45.0s), 0032/0417 VUs, 6724 complete and 0 interrupted iterations
+buyers     [  94% ] 0031/0416 VUs  3m44.9s/4m0s  30.00 iters/s
+observer   [  94% ] 1 VUs          3m44.9s/4m0s 
+
+running (3m46.0s), 0034/0417 VUs, 6753 complete and 0 interrupted iterations
+buyers     [  94% ] 0033/0416 VUs  3m45.9s/4m0s  30.00 iters/s
+observer   [  94% ] 1 VUs          3m45.9s/4m0s 
+
+running (3m47.0s), 0033/0417 VUs, 6785 complete and 0 interrupted iterations
+buyers     [  95% ] 0032/0416 VUs  3m46.9s/4m0s  30.00 iters/s
+observer   [  95% ] 1 VUs          3m46.9s/4m0s 
+
+running (3m48.0s), 0033/0417 VUs, 6816 complete and 0 interrupted iterations
+buyers     [  95% ] 0032/0416 VUs  3m47.9s/4m0s  30.00 iters/s
+observer   [  95% ] 1 VUs          3m47.9s/4m0s 
+
+running (3m49.0s), 0034/0417 VUs, 6846 complete and 0 interrupted iterations
+buyers     [  95% ] 0033/0416 VUs  3m48.9s/4m0s  30.00 iters/s
+observer   [  95% ] 1 VUs          3m48.9s/4m0s 
+
+running (3m50.0s), 0034/0417 VUs, 6877 complete and 0 interrupted iterations
+buyers     [  96% ] 0033/0416 VUs  3m49.9s/4m0s  30.00 iters/s
+observer   [  96% ] 1 VUs          3m49.9s/4m0s 
+
+running (3m51.0s), 0035/0417 VUs, 6907 complete and 0 interrupted iterations
+buyers     [  96% ] 0034/0416 VUs  3m50.9s/4m0s  30.00 iters/s
+observer   [  96% ] 1 VUs          3m50.9s/4m0s 
+
+running (3m52.0s), 0032/0417 VUs, 6941 complete and 0 interrupted iterations
+buyers     [  97% ] 0031/0416 VUs  3m51.9s/4m0s  30.00 iters/s
+observer   [  97% ] 1 VUs          3m51.9s/4m0s 
+
+running (3m53.0s), 0033/0417 VUs, 6971 complete and 0 interrupted iterations
+buyers     [  97% ] 0032/0416 VUs  3m52.9s/4m0s  30.00 iters/s
+observer   [  97% ] 1 VUs          3m52.9s/4m0s 
+
+running (3m54.0s), 0033/0417 VUs, 7002 complete and 0 interrupted iterations
+buyers     [  97% ] 0032/0416 VUs  3m53.9s/4m0s  30.00 iters/s
+observer   [  97% ] 1 VUs          3m53.9s/4m0s 
+
+running (3m55.0s), 0033/0417 VUs, 7033 complete and 0 interrupted iterations
+buyers     [  98% ] 0032/0416 VUs  3m54.9s/4m0s  30.00 iters/s
+observer   [  98% ] 1 VUs          3m54.9s/4m0s 
+
+running (3m56.0s), 0033/0417 VUs, 7064 complete and 0 interrupted iterations
+buyers     [  98% ] 0032/0416 VUs  3m55.9s/4m0s  30.00 iters/s
+observer   [  98% ] 1 VUs          3m55.9s/4m0s 
+
+running (3m57.0s), 0034/0417 VUs, 7094 complete and 0 interrupted iterations
+buyers     [  99% ] 0033/0416 VUs  3m56.9s/4m0s  30.00 iters/s
+observer   [  99% ] 1 VUs          3m56.9s/4m0s 
+
+running (3m58.0s), 0034/0417 VUs, 7125 complete and 0 interrupted iterations
+buyers     [  99% ] 0033/0416 VUs  3m57.9s/4m0s  30.00 iters/s
+observer   [  99% ] 1 VUs          3m57.9s/4m0s 
+
+running (3m59.0s), 0034/0417 VUs, 7156 complete and 0 interrupted iterations
+buyers     [ 100% ] 0033/0416 VUs  3m58.9s/4m0s  30.00 iters/s
+observer   [ 100% ] 1 VUs          3m58.9s/4m0s 
+
+running (4m00.0s), 0033/0417 VUs, 7188 complete and 0 interrupted iterations
+buyers     [ 100% ] 0032/0416 VUs  3m59.9s/4m0s  30.00 iters/s
+observer   [ 100% ] 1 VUs          3m59.9s/4m0s 
+
+running (4m01.0s), 0006/0417 VUs, 7218 complete and 0 interrupted iterations
+buyers   ↓ [ 100% ] 0033/0416 VUs  4m0s  30.00 iters/s
+observer ✓ [ 100% ] 1 VUs          4m0s 
+
+=== confirm outcome by phase ===
+{
+  "outcomes": {
+    "5_recover": {
+      "circuit_open": 465,
+      "approved": 1335
+    },
+    "2_pg_5xx": {
+      "unknown": 22,
+      "circuit_open": 1327
+    },
+    "1_normal": {
+      "approved": 1320
+    },
+    "4_pg_hang": {
+      "circuit_open": 724,
+      "unknown": 410
+    },
+    "3_recover": {
+      "approved": 1174,
+      "circuit_open": 176,
+      "unknown": 1
+    }
+  },
+  "confirmLatencyMs": {
+    "4_pg_hang": {
+      "avg": 7246,
+      "p(50)": 3,
+      "p(95)": 20031,
+      "p(99)": 20124,
+      "max": 20447
+    },
+    "5_recover": {
+      "max": 550,
+      "avg": 65,
+      "p(50)": 68,
+      "p(95)": 124,
+      "p(99)": 180
+    },
+    "2_pg_5xx": {
+      "p(99)": 37,
+      "max": 138,
+      "avg": 4,
+      "p(50)": 3,
+      "p(95)": 8
+    },
+    "3_recover": {
+      "max": 20037,
+      "avg": 88,
+      "p(50)": 77,
+      "p(95)": 123,
+      "p(99)": 133
+    },
+    "1_normal": {
+      "p(99)": 176,
+      "max": 276,
+      "avg": 85,
+      "p(50)": 85,
+      "p(95)": 125
+    }
+  }
+}
+
+running (4m01.1s), 0000/0417 VUs, 7224 complete and 0 interrupted iterations
+buyers   ✓ [ 100% ] 0000/0416 VUs  4m0s  30.00 iters/s
+observer ✓ [ 100% ] 1 VUs          4m0s 

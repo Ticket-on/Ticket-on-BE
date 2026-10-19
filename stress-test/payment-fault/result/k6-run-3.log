@@ -1,0 +1,79 @@
+time="2026-10-10T22:56:38+09:00" level=info msg="[1_normal t=0s] circuit confirm=CLOSED query=CLOSED" source=console
+time="2026-10-10T22:57:23+09:00" level=info msg="[2_pg_5xx t=46s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T22:57:28+09:00" level=info msg="[2_pg_5xx t=51s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T22:57:38+09:00" level=info msg="[2_pg_5xx t=61s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T22:57:44+09:00" level=info msg="[2_pg_5xx t=67s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T22:57:54+09:00" level=info msg="[2_pg_5xx t=77s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T22:57:55+09:00" level=info msg="[2_pg_5xx t=78s] circuit confirm=OPEN query=OPEN" source=console
+time="2026-10-10T22:58:05+09:00" level=info msg="[2_pg_5xx t=88s] circuit confirm=OPEN query=HALF_OPEN" source=console
+time="2026-10-10T22:58:14+09:00" level=info msg="[3_recover t=96s] circuit confirm=HALF_OPEN query=HALF_OPEN" source=console
+time="2026-10-10T22:58:15+09:00" level=info msg="[3_recover t=97s] circuit confirm=CLOSED query=CLOSED" source=console
+time="2026-10-10T22:59:14+09:00" level=info msg="[4_pg_hang t=156s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T22:59:23+09:00" level=info msg="[4_pg_hang t=165s] circuit confirm=HALF_OPEN query=CLOSED" source=console
+time="2026-10-10T22:59:24+09:00" level=info msg="[4_pg_hang t=166s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T22:59:34+09:00" level=info msg="[4_pg_hang t=177s] circuit confirm=HALF_OPEN query=CLOSED" source=console
+time="2026-10-10T22:59:38+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8081/v1/api/tickets/purchase\": EOF"
+time="2026-10-10T22:59:43+09:00" level=info msg="[5_recover t=186s] circuit confirm=OPEN query=CLOSED" source=console
+time="2026-10-10T22:59:53+09:00" level=info msg="[5_recover t=196s] circuit confirm=CLOSED query=CLOSED" source=console
+=== confirm outcome by phase ===
+{
+  "outcomes": {
+    "1_normal": {
+      "approved": 1320
+    },
+    "3_recover": {
+      "approved": 1174,
+      "circuit_open": 176
+    },
+    "5_recover": {
+      "circuit_open": 464,
+      "purchase_failed": 1,
+      "approved": 1335
+    },
+    "2_pg_5xx": {
+      "unknown": 23,
+      "circuit_open": 1327
+    },
+    "4_pg_hang": {
+      "circuit_open": 722,
+      "unknown": 411
+    }
+  },
+  "confirmLatencyMs": {
+    "1_normal": {
+      "avg": 114,
+      "p(50)": 94,
+      "p(95)": 216,
+      "p(99)": 728,
+      "max": 1120
+    },
+    "2_pg_5xx": {
+      "avg": 7,
+      "p(50)": 3,
+      "p(95)": 19,
+      "p(99)": 98,
+      "max": 222
+    },
+    "4_pg_hang": {
+      "p(50)": 5,
+      "p(95)": 20036,
+      "p(99)": 20095,
+      "max": 20273,
+      "avg": 7269
+    },
+    "5_recover": {
+      "avg": 65,
+      "p(50)": 67,
+      "p(95)": 123,
+      "p(99)": 144,
+      "max": 378
+    },
+    "3_recover": {
+      "avg": 77,
+      "p(50)": 79,
+      "p(95)": 129,
+      "p(99)": 172,
+      "max": 250
+    }
+  }
+}

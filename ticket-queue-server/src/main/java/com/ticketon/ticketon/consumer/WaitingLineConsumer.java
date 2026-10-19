@@ -1,6 +1,7 @@
 package com.ticketon.ticketon.consumer;
 
-import com.ticket.exception.custom.KafkaConsumerException;
+import com.ticket.support.exception.AppException;
+import com.ticket.support.exception.ErrorType;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +36,7 @@ public class WaitingLineConsumer {
                     batchWriter.enqueue(record.value());
                 })
                 .doOnError(e -> {
-                    throw new KafkaConsumerException(e.getMessage());
+                    throw new AppException(ErrorType.WAITING_LINE_CONSUME_FAILED, e);
                 })
                 .subscribe();
     }

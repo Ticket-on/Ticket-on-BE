@@ -7,12 +7,12 @@ plugins {
 
 group = 'com.ticketon'
 version = '0.0.1-SNAPSHOT'
-
+def queryDslVersion = "7.0"
 configurations {
-    agent
     compileOnly {
         extendsFrom annotationProcessor
     }
+    mockitoAgent
 }
 
 java {
@@ -26,34 +26,15 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-bootRun {
-    jvmArgs = [
-            "-javaagent:${buildDir}/agent/opentelemetry-javaagent.jar",
-            "-Dotel.metrics.exporter=otlp",
-            "-Dotel.exporter.otlp.endpoint=http://otel-collector:4318/v1/metrics",
-            "-Dotel.exporter.otlp.protocol=http/protobuf",
-            "-Dotel.instrumentation.runtime-metrics.enabled=true",
-            "-Dotel.instrumentation.system-metrics.enabled=true",
-            "-Dotel.instrumentation.micrometer.enabled=true",
-            "-Dotel.resource.attributes=service.name=ticket-service",
-            "-Dotel.metrics.export.interval=1000",
-            "-Dotel.javaagent.debug=false",
-            "-Dotel.logs.exporter=none",
-            "-Dspring.main.allow-bean-definition-overriding=true"
-    ]
-}
-
 bootRun.dependsOn("copyAgent")
 
 dependencies {
     implementation project(':ticket-common')
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    agent 'io.opentelemetry.javaagent:opentelemetry-javaagent:2.7.0'
+
     implementation 'io.lettuce:lettuce-core'
     implementation 'io.micrometer:micrometer-core'
-    implementation 'io.opentelemetry:opentelemetry-api:1.50.0'
-    implementation 'io.opentelemetry:opentelemetry-sdk:1.50.0'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.50.0'
+
     implementation 'io.opentelemetry:opentelemetry-sdk-metrics:1.50.0'
     implementation 'io.micrometer:micrometer-registry-otlp'
     implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -70,53 +51,52 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation("io.github.openfeign.querydsl:querydsl-core:${queryDslVersion}")
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:$queryDslVersion")
+    annotationProcessor("io.github.openfeign.querydsl:querydsl-apt:$queryDslVersion:jpa")
+
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql:1.19.0'
+    testImplementation 'org.testcontainers:kafka:1.19.0'
+
+    mockitoAgent('org.mockito:mockito-core') {
+        transitive = false
+    }
+}
+tasks.named('test') {
+    useJUnitPlatform {
+        excludeTags 'integration'
+    }
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
 
-tasks.register("copyAgent", Copy) {
-    from(configurations.agent)
-    into(layout.buildDirectory.dir("agent"))
-    rename { 'opentelemetry-javaagent.jar' }
+tasks.register('integrationTest', Test) {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+
+    useJUnitPlatform {
+        includeTags 'integration'
+    }
+
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
 
-jib {
-    from {
-        image = "eclipse-temurin:21-jdk"
-        platforms {
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-    extraDirectories {
-        paths {
-            path {
-                setFrom(layout.buildDirectory.dir("agent"))
-                into = "/otelagent"
-            }
-        }
-    }
-    container {
-        mainClass = "com.huisam.orderapplication.OrderApplicationKt"
-        jvmFlags = [
-                "-javaagent:/otelagent/opentelemetry-javaagent.jar",
-                "-Dotel.metrics.exporter=otlp",
-                "-Dotel.exporter.otlp.endpoint=http://otel-collector:4318/v1/metrics",
-                "-Dotel.exporter.otlp.protocol=http/protobuf",
-                "-Dotel.instrumentation.runtime-metrics.enabled=true",
-                "-Dotel.instrumentation.system-metrics.enabled=true",
-                "-Dotel.instrumentation.micrometer.enabled=true",
-                "-Dotel.resource.attributes=service.name=ticket-service",
-                "-Dotel.metrics.export.interval=1000",
-                "-Dotel.javaagent.debug=false",
-                "-Dotel.logs.exporter=none",
-                "-Dspring.main.allow-bean-definition-overriding=true"
-        ]
-    }
+def generated = 'src/main/generated'
+
+
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+clean {
+    delete file('src/main/generated')
 }
 
 jibDockerBuild.dependsOn("copyAgent")

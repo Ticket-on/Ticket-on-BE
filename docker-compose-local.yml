@@ -16,24 +16,8 @@ services:
       - --binlog-row-image=FULL
       - --gtid-mode=ON
       - --enforce-gtid-consistency=ON
-    networks:
-      - monitoring
-
-
-  waiting-line-redis:
-    image: redis:7.0.11
-    container_name: waiting-line-redis
-    ports:
-      - "6379:6379"
-    networks:
-      - monitoring
-
-  reservation-redis:
-    image: redis:7.0.11
-    container_name: reservation-redis
-    command: ["redis-server", "--port", "6380"]
-    ports:
-      - "6380:6379"
+      - --innodb_flush_log_at_trx_commit=2
+      - --sync_binlog=0
     networks:
       - monitoring
 
@@ -57,8 +41,9 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 600000
     networks:
       - monitoring
 
@@ -88,24 +73,6 @@ services:
       - kafka
       - mysql
 
-  queue-server-1:
-    build: ./ticket-queue-server
-    container_name: queue-server-1
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-    env_file:
-      - .env
-    ports:
-      - "8082:8080"
-    restart: always
-    depends_on:
-      - reservation-redis
-      - waiting-line-redis
-    networks:
-      - monitoring
-    volumes:
-      - ./wait-for-it.sh:/wait-for-it.sh
-
 
   api-server-1:
     build: ./ticket-api-server
@@ -114,8 +81,6 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     env_file:
       - .env
-    depends_on:
-      - reservation-redis
     ports:
       - "8081:8080"
     restart: always
@@ -123,57 +88,64 @@ services:
       - monitoring
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
+      - ./logs:/var/log/ticketon
 
   kafka-exporter:
     image: danielqsj/kafka-exporter:latest
     container_name: kafka-exporter
+    command: ["--kafka.server=kafka:9092"]
+    restart: always
     ports:
       - "9308:9308"
-    environment:
-      KAFKA_URI: kafka:9092
     networks:
       - monitoring
 
-  redis-exporter:
-    image: oliver006/redis_exporter:v1.60.0
-    container_name: redis-exporter
-    ports:
-      - "9121:9121"
-    environment:
-      - REDIS_ADDR=redis://wating-line-redis:6379
-    networks:
-      - monitoring
-    depends_on:
-      - waiting-line-redis
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
-    ports:
-      - "9100:9100"
-    networks:
-      - monitoring
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    restart: always
+    command: [
+      "run",
+      "--server.http.listen-addr=0.0.0.0:12345",
+      "--storage.path=/var/lib/alloy/data",
+      "/etc/alloy/config.alloy"
+    ]
     volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
+      - ./monitoring/alloy/config.alloy:/etc/alloy/config.alloy
+      - ./logs:/var/log/ticketon:ro
+    ports:
+      - "12345:12345"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
     command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"'
-
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
-    ports:
-      - "8086:8086"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-remote-write-receiver"
+      - "--storage.tsdb.retention.time=15d"
     volumes:
-      - influxdb-storage:/var/lib/influxdb
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml
+      - loki-data:/loki
     networks:
       - monitoring
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
@@ -182,50 +154,20 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
-      - influxdb
+      - loki
     networks:
       - monitoring
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
 
-
-  tempo:
-    image: grafana/tempo:2.4.1
-    container_name: tempo
+  reservation-redis:
+    image: redis:7.0.11
+    container_name: reservation-redis
+    command: [ "redis-server", "--port", "6380" ]
     ports:
-      - "3200:3200"
-    volumes:
-      - ./monitoring-config/tempo-config.yml:/etc/tempo-config.yml
-    command: --config.file=/etc/tempo-config.yml
-    networks:
-      - monitoring
-
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.93.0
-    container_name: otel-collector
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-      - "8889:8889"
-    volumes:
-      - ./monitoring-config/otel-collector-config.yml:/etc/otel/otel-collector-config.yml
-    command: --config=/etc/otel/otel-collector-config.yml
-    networks:
-      - monitoring
-    depends_on:
-      - tempo
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring-config/prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention.time=4d'
-      - '--log.level=warn'
+      - "6380:6380"
+    restart: always
     networks:
       - monitoring
 
@@ -234,7 +176,8 @@ networks:
     driver: bridge
 
 volumes:
-  grafana-storage:
-  influxdb-storage:
+  grafana-data:
+  prometheus-data:
+  loki-data:
 
 

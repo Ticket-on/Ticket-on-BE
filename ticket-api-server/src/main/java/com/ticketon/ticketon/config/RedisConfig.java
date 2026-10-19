@@ -1,103 +1,54 @@
 package com.ticketon.ticketon.config;
 
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 
 @Configuration
 public class RedisConfig {
 
-    @Value("${redis.waiting-line.host}")
-    private String waitingHost;
-
-    @Value("${redis.waiting-line.port}")
-    private int waitingPort;
-
     @Value("${redis.reservation.host}")
-    private String reservationHost;
+    private String redisHost;
 
     @Value("${redis.reservation.port}")
-    private int reservationPort;
+    private int redisPort;
 
-    // 대기열 LettuceConnectionFactory
+    private static final String REDISSON_HOST_PREFIX = "redis://";
+
     @Bean
-    public LettuceConnectionFactory waitingLettuceConnectionFactory() {
-        return new LettuceConnectionFactory(waitingHost, waitingPort);
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+
+        config.useSingleServer()
+                .setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
+
+        return Redisson.create(config);
     }
 
-    // 예약 LettuceConnectionFactory
     @Bean
-    @Primary
-    public LettuceConnectionFactory reservationLettuceConnectionFactory() {
-        return new LettuceConnectionFactory(reservationHost, reservationPort);
+    public RedisConnectionFactory redisConnectionFactory(RedissonClient redissonClient) {
+        return new RedissonConnectionFactory(redissonClient);
     }
 
-    // RedisClient (Lettuce) — 대기열용 (StatefulRedisConnection 생성용)
-    @Bean(destroyMethod = "shutdown")
-    public RedisClient waitingRedisClient() {
-        String redisUri = String.format("redis://%s:%d", waitingHost, waitingPort);
-        return RedisClient.create(redisUri);
-    }
-
-    // StatefulRedisConnection 빈 생성 (RedisClient에서 직접 connect)
-    @Bean(destroyMethod = "close")
-    public StatefulRedisConnection<String, String> waitingStatefulRedisConnection(RedisClient waitingRedisClient) {
-        return waitingRedisClient.connect();
-    }
-
-    // 기본 RedisTemplate (대기열 Redis)
-    @Bean(name = "redisTemplate")
-    @Primary
-    public RedisTemplate<String, String> defaultRedisTemplate(
-            LettuceConnectionFactory waitingLettuceConnectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(waitingLettuceConnectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
-    }
-
-    // 대기열 RedisTemplate
     @Bean
-    public RedisTemplate<String, String> waitingRedisTemplate(
-            @Qualifier("waitingLettuceConnectionFactory") LettuceConnectionFactory waitingLettuceConnectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(waitingLettuceConnectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
+    public StringRedisTemplate redisTemplate(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
     }
 
-    // 예약 RedisTemplate
     @Bean
-    public RedisTemplate<String, String> reservationRedisTemplate(
-            LettuceConnectionFactory reservationLettuceConnectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(reservationLettuceConnectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
-    }
-
-    // 대기열 ReactiveRedisTemplate
-    @Bean
-    public ReactiveRedisTemplate<String, String> waitingReactiveRedisTemplate(
-            LettuceConnectionFactory waitingLettuceConnectionFactory) {
-        RedisSerializationContext<String, String> context = RedisSerializationContext
-                .<String, String>newSerializationContext(new StringRedisSerializer())
-                .value(new StringRedisSerializer())
-                .build();
-        return new ReactiveRedisTemplate<>(waitingLettuceConnectionFactory, context);
+    public RedisScript<Long> decreaseStockScript() {
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+        redisScript.setLocation(new ClassPathResource("scripts/decrease_stock.lua"));
+        redisScript.setResultType(Long.class);
+        return redisScript;
     }
 }

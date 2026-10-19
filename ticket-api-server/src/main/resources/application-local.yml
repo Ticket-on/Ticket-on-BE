@@ -15,6 +15,8 @@ spring:
       initialization-fail-timeout: 1
       read-only: false
       leak-detection-threshold: 0
+      data-source-properties:
+        rewriteBatchedStatements: true # JDBC 배치를 multi-row INSERT 로 재작성
 
 kafka:
   admin:
@@ -22,9 +24,11 @@ kafka:
       bootstrap.servers: localhost:9092
   topic-config:
     payment:
-      name: payment-topic
+      name: payment-confirm
       partitions: 3
       replicas: 1
+    payment-unknown:
+      name: payment-unknown
     ticket:
       name: ticket-topic
       partitions: 3
@@ -42,6 +46,9 @@ kafka:
     retry: 2
 
   consumer:
+    payment-unknown-group:
+      bootstrap-servers: localhost:9092
+      group-id: payment-unknown-group
     payment-group:
       bootstrap-servers: localhost:9092
       group-id: payment-group

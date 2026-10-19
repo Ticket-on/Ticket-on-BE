@@ -18,30 +18,18 @@ spring:
 
 logging:
   level:
-    root: INFO
-    io.opentelemetry: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: debug
+    root: ERROR
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql: INFO
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO
+
 
 #snail-catch:
 #  enabled: false
 #  repository-pointcut: execution(* com.ticketon.ticketon.domain..repository..*(..))
 #  api-key: 13a4d744b37046e2b62f90077c0936f8
 
-server:
-  tomcat:
-    threads:
-      max: 200
-      min-spare: 20
-      max-queue-capacity: 1000
-    max-connections: 10000
-    accept-count: 500
-    connection-timeout: 60000
-    keep-alive-timeout: 30000
-    max-http-header-size: 8192
-    max-keep-alive-requests: 100
 
 
 toss:
@@ -50,3 +38,30 @@ toss:
   base-url: https://api.tosspayments.com/v1/payments
   confirm-end-point: /confirm
   cancel-end-point: /cancel
+  query-end-point: /orders/%s
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      toss-confirm:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-failure-predicate: com.ticketon.ticketon.payment.implement.gateway.PgUnavailablePredicate
+      toss-query:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        slow-call-duration-threshold: 3s
+        slow-call-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-failure-predicate: com.ticketon.ticketon.payment.implement.gateway.PgUnavailablePredicate
